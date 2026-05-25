@@ -1,0 +1,28 @@
+# Build artifacts
+eij-deploy.zip
+eij-stage/
+
+# Internal / non-public docs (don't publish these on the live site)
+EIJ_Grant_Strategy_Guide.docx
+EIJ_Grant_Strategy_Guide.pdf
+EIJ_Document_Checklist.docx
+unclaimed_money_dashboard.html
+possible eij relase of info.pdf
+encounters in joy new intake experiment.pdf
+
+# Source archive of original files
+files.zip
+
+# Claude Code local state and build scripts
+.claude/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
