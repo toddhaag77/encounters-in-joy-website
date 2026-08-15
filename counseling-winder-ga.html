@@ -115,7 +115,7 @@
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
           770-807-1227
         </a>
-        <a href="index.html#contact" class="bg-gold-400 text-brown-900 font-semibold px-5 py-2 rounded-full hover:bg-gold-300">Take the first step</a>
+        <a href="#contact" class="bg-gold-400 text-brown-900 font-semibold px-5 py-2 rounded-full hover:bg-gold-300">Take the first step</a>
       </div>
       <a href="donate.html" class="md:hidden text-sm text-crimson-700 font-medium">Donate</a>
       <a href="index.html" class="md:hidden text-sm text-crimson-700 font-medium">&larr; Home</a>
@@ -133,7 +133,7 @@
         Faith-grounded counseling for individuals, couples, and families in Winder and surrounding Barrow County.
         Our office is 8 miles away &mdash; about 15 minutes via Highway 82.
       </p>
-      <a href="index.html#contact" class="inline-block bg-gold-400 text-brown-900 font-semibold px-7 py-3.5 rounded-full hover:bg-gold-300 transition-colors shadow-md shadow-gold-400/30">
+      <a href="#contact" class="inline-block bg-gold-400 text-brown-900 font-semibold px-7 py-3.5 rounded-full hover:bg-gold-300 transition-colors shadow-md shadow-gold-400/30">
         Take the first step
       </a>
     </div>
@@ -191,22 +191,65 @@
     </div>
   </section>
 
-  <!-- Final CTA -->
-  <section class="py-16 bg-cream-100 border-t border-cream-200">
-    <div class="max-w-2xl mx-auto px-6 text-center">
-      <h2 class="font-display text-3xl md:text-4xl font-semibold text-crimson-900 mb-4">Ready when you are.</h2>
-      <p class="text-stone-700 leading-relaxed mb-8">
-        Send a short message and a real person will respond within 24 hours.
-        Whether you're across the county line in Winder or right next door, the first step is the same.
-      </p>
-      <div class="flex flex-wrap items-center justify-center gap-4">
-        <a href="index.html#contact" class="bg-gold-400 text-brown-900 font-semibold px-7 py-3.5 rounded-full hover:bg-gold-300 transition-colors shadow-md shadow-gold-400/30">
-          Take the first step
-        </a>
-        <a href="tel:7708071227" class="inline-flex items-center gap-2 text-crimson-700 hover:text-crimson-900 font-semibold">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
-          Or call &amp; leave a voicemail · 770-807-1227
-        </a>
+  <!-- Contact + Lead Form -->
+  <section id="contact" class="py-16 md:py-20 bg-cream-100 border-t border-cream-200">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="text-center mb-10">
+        <p class="font-body text-crimson-700 font-semibold tracking-widest uppercase text-xs mb-3">Get in touch</p>
+        <h2 class="font-display text-3xl md:text-4xl font-semibold text-crimson-900 mb-4">Ready when you are.</h2>
+        <p class="text-stone-700 max-w-xl mx-auto">Send a short message and a real person will respond within 24 hours. Whether you're across the county line in Winder or right next door, the first step is the same.</p>
+      </div>
+      <div class="grid lg:grid-cols-5 gap-8 max-w-4xl mx-auto">
+        <form id="leadForm" name="lead-inquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/?submitted=true" class="lg:col-span-3 bg-white rounded-2xl p-6 md:p-8 border border-cream-200" onsubmit="return submitLead(event)">
+          <input type="hidden" name="form-name" value="lead-inquiry">
+          <p class="hidden"><label>Leave this field empty: <input name="bot-field"></label></p>
+          <div class="space-y-4">
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-semibold text-stone-700 mb-1.5">First name <span class="text-crimson-600">*</span></label>
+                <input type="text" name="firstName" required class="w-full bg-cream-50 border border-cream-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-crimson-400 focus:ring-2 focus:ring-crimson-100 transition">
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-stone-700 mb-1.5">Phone</label>
+                <input type="tel" name="phone" class="w-full bg-cream-50 border border-cream-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-crimson-400 focus:ring-2 focus:ring-crimson-100 transition" placeholder="Optional">
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-stone-700 mb-1.5">Email <span class="text-crimson-600">*</span></label>
+              <input type="email" name="email" required class="w-full bg-cream-50 border border-cream-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-crimson-400 focus:ring-2 focus:ring-crimson-100 transition">
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-stone-700 mb-1.5">What brings you here today? <span class="text-crimson-600">*</span></label>
+              <textarea name="message" rows="3" required class="w-full bg-cream-50 border border-cream-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-crimson-400 focus:ring-2 focus:ring-crimson-100 transition" placeholder="A few sentences is plenty. Whatever you're comfortable sharing."></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-stone-700 mb-1.5">Preferred way to follow up</label>
+              <div class="flex flex-wrap gap-4 text-sm text-stone-600">
+                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="contactMethod" value="email" checked class="text-crimson-700 accent-crimson-700"> Email</label>
+                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="contactMethod" value="phone" class="text-crimson-700 accent-crimson-700"> Phone call</label>
+                <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="contactMethod" value="text" class="text-crimson-700 accent-crimson-700"> Text</label>
+              </div>
+            </div>
+            <button type="submit" class="w-full bg-gold-400 text-brown-900 font-semibold px-7 py-3 rounded-full hover:bg-gold-500 transition-colors shadow-md shadow-gold-400/30">
+              Send my message
+            </button>
+            <p class="text-xs text-stone-500 text-center">We respond within 24 hours. Your information is treated with care and never shared.</p>
+          </div>
+        </form>
+
+        <div class="lg:col-span-2 space-y-4">
+          <a href="tel:7708071227" class="block bg-crimson-50 rounded-2xl p-5 border border-crimson-100 hover:border-crimson-300 transition-colors">
+            <p class="font-display text-lg font-semibold text-crimson-900 mb-1">Call &amp; leave a voicemail</p>
+            <p class="text-crimson-700 font-semibold">770-807-1227</p>
+          </a>
+          <div class="bg-crimson-50 rounded-2xl p-5 border border-crimson-100">
+            <p class="font-display text-lg font-semibold text-crimson-900 mb-1">Email</p>
+            <a href="mailto:brojefflangley@encountersinjoy.org" class="text-crimson-700 text-sm break-all hover:underline">brojefflangley@encountersinjoy.org</a>
+          </div>
+          <div class="bg-gold-100 rounded-2xl p-5 border border-gold-200">
+            <p class="text-sm text-brown-800">Sliding scale &amp; a Counseling Scholarship Fund are available. Cost should never be why someone goes without help.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -262,7 +305,72 @@
     </div>
   </footer>
 
+  <!-- Sticky mobile call/text bar -->
+  <div class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-cream-300 shadow-[0_-4px_12px_rgba(0,0,0,0.08)] flex" style="padding-bottom: env(safe-area-inset-bottom);">
+    <a href="tel:7708071227" class="flex-1 flex items-center justify-center gap-2 py-3.5 text-crimson-800 font-semibold text-sm border-r border-cream-200 active:bg-cream-50">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+      Call
+    </a>
+    <a href="sms:7708071227" class="flex-1 flex items-center justify-center gap-2 py-3.5 text-brown-900 font-semibold text-sm bg-gold-400 active:bg-gold-500">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"/></svg>
+      Text us
+    </a>
+  </div>
+  <div class="md:hidden h-14"></div>
+
   <script>
+    function submitLead(e) {
+      e.preventDefault();
+      const form = e.target;
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalLabel = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
+
+      const data = new FormData(form);
+      const body = new URLSearchParams();
+      data.forEach((value, key) => body.append(key, value));
+
+      fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString()
+      })
+      .then((res) => {
+        if (!res.ok) throw new Error('Network response was not ok');
+        showLeadSuccess(form);
+      })
+      .catch(() => {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalLabel;
+        showLeadError(form);
+      });
+
+      return false;
+    }
+
+    function showLeadSuccess(form) {
+      form.innerHTML = `
+        <div class="text-center py-10">
+          <div class="w-16 h-16 bg-gold-100 rounded-full flex items-center justify-center mx-auto mb-5">
+            <svg class="w-8 h-8 text-gold-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+          </div>
+          <h3 class="font-display text-2xl font-semibold text-crimson-900 mb-2">Message received.</h3>
+          <p class="text-stone-600 max-w-sm mx-auto">Thank you for reaching out. We'll respond within 24 hours.</p>
+          <p class="text-stone-400 text-xs mt-6">If you don't hear from us, please call <a href="tel:7708071227" class="text-crimson-700 underline">770-807-1227</a>.</p>
+        </div>
+      `;
+    }
+
+    function showLeadError(form) {
+      const existing = form.querySelector('.lead-error');
+      if (existing) return;
+      const err = document.createElement('p');
+      err.className = 'lead-error text-sm text-crimson-700 bg-crimson-50 border border-crimson-200 rounded-lg p-3 text-center';
+      err.innerHTML = 'Something went wrong sending your message. Please call <a href="tel:7708071227" class="underline font-semibold">770-807-1227</a> or email <a href="mailto:brojefflangley@encountersinjoy.org" class="underline font-semibold">brojefflangley@encountersinjoy.org</a> directly.';
+      form.querySelector('button[type="submit"]').insertAdjacentElement('beforebegin', err);
+    }
+
     (function() {
       function track(name, params) {
         if (typeof gtag === 'function') gtag('event', name, params || {});
@@ -272,6 +380,14 @@
         track('phone_click', { event_category: 'engagement', event_label: a.getAttribute('href') })));
       document.querySelectorAll('a[href^="mailto:"]').forEach(a => a.addEventListener('click', () =>
         track('email_click', { event_category: 'engagement', event_label: a.getAttribute('href') })));
+      document.querySelectorAll('a[href^="sms:"]').forEach(a => a.addEventListener('click', () =>
+        track('text_click', { event_category: 'engagement', event_label: a.getAttribute('href') })));
+      const leadForm = document.getElementById('leadForm');
+      if (leadForm) {
+        leadForm.addEventListener('submit', () => {
+          track('generate_lead', { event_category: 'conversion', value: 1, currency: 'USD' });
+        });
+      }
     })();
   </script>
 </body>
