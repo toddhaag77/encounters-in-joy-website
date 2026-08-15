@@ -266,7 +266,7 @@
         <p class="text-stone-700 max-w-xl mx-auto">Send a short message. A real person will respond within 24 hours and we'll talk through whether what we do matches what you need.</p>
       </div>
       <div class="grid lg:grid-cols-5 gap-8 max-w-4xl mx-auto">
-        <form id="leadForm" name="lead-inquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/?submitted=true" class="lg:col-span-3 bg-white rounded-2xl p-6 md:p-8 border border-cream-200" onsubmit="return submitLead(event)">
+        <form id="leadForm" name="lead-inquiry" method="POST" data-netlify="true" data-netlify-recaptcha="true" netlify-honeypot="bot-field" action="/?submitted=true" class="lg:col-span-3 bg-white rounded-2xl p-6 md:p-8 border border-cream-200" onsubmit="return submitLead(event)">
           <input type="hidden" name="form-name" value="lead-inquiry">
           <p class="hidden"><label>Leave this field empty: <input name="bot-field"></label></p>
           <div class="space-y-4">
@@ -296,6 +296,7 @@
                 <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="contactMethod" value="text" class="text-crimson-700 accent-crimson-700"> Text</label>
               </div>
             </div>
+            <div data-netlify-recaptcha="true"></div>
             <button type="submit" class="w-full bg-gold-400 text-brown-900 font-semibold px-7 py-3 rounded-full hover:bg-gold-500 transition-colors shadow-md shadow-gold-400/30">
               Send my message
             </button>

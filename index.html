@@ -572,7 +572,7 @@
 
       <div class="grid lg:grid-cols-5 gap-10 max-w-5xl mx-auto">
         <!-- Lead form (3/5 width) — Netlify Forms enabled -->
-        <form id="leadForm" name="lead-inquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/?submitted=true" class="lg:col-span-3 bg-cream-50 rounded-2xl p-8 md:p-10 border border-cream-200 fade-up" onsubmit="return submitLead(event)">
+        <form id="leadForm" name="lead-inquiry" method="POST" data-netlify="true" data-netlify-recaptcha="true" netlify-honeypot="bot-field" action="/?submitted=true" class="lg:col-span-3 bg-cream-50 rounded-2xl p-8 md:p-10 border border-cream-200 fade-up" onsubmit="return submitLead(event)">
           <!-- Netlify-required hidden field naming the form -->
           <input type="hidden" name="form-name" value="lead-inquiry">
           <!-- Honeypot anti-spam (hidden from users; bots fill it and get rejected) -->
@@ -605,6 +605,7 @@
                 <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="contactMethod" value="text" class="text-crimson-700 accent-crimson-700"> Text</label>
               </div>
             </div>
+            <div data-netlify-recaptcha="true"></div>
             <button type="submit" class="w-full bg-gold-400 text-brown-900 font-semibold px-7 py-3.5 rounded-full hover:bg-gold-500 transition-colors shadow-md shadow-gold-400/30">
               Send my message
             </button>
