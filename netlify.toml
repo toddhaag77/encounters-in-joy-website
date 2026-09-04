@@ -1,0 +1,20 @@
+# Netlify settings for encountersinjoy.org
+#
+# The site is plain static HTML. The only build step turns blog posts
+# (blog/posts/*.md, written in the CMS at /admin/) into web pages.
+# See tools/build-blog.js.
+
+[build]
+  command = "node tools/build-blog.js"
+  publish = "."
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# The CMS editor shell: don't cache it (so config changes apply right away)
+# and keep it out of search engines.
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    Cache-Control = "no-cache"
+    X-Robots-Tag = "noindex"

@@ -1,0 +1,105 @@
+# Decap CMS settings for the blog editor at https://encountersinjoy.org/admin/
+#
+# How publishing works:
+#   author clicks Publish → DecapBridge commits the post to GitHub (main)
+#   → Netlify rebuilds the site (tools/build-blog.js) → post is live in ~1 minute.
+
+backend:
+  name: git-gateway
+  repo: toddhaag77/encounters-in-joy-website
+  branch: main
+  # DecapBridge (https://decapbridge.com, free tier) handles logins so authors
+  # never need a GitHub account. After creating the site there, replace the
+  # placeholder below with the Site ID it gives you.
+  identity_url: https://auth.decapbridge.com/sites/REPLACE_WITH_DECAPBRIDGE_SITE_ID
+  gateway_url: https://gateway.decapbridge.com
+  commit_messages:
+    create: 'Blog: add "{{slug}}" ({{author-name}} via CMS)'
+    update: 'Blog: update "{{slug}}" ({{author-name}} via CMS)'
+    delete: 'Blog: delete "{{slug}}" ({{author-name}} via CMS)'
+    uploadMedia: 'Blog: upload {{path}} ({{author-name}} via CMS)'
+    deleteMedia: 'Blog: remove {{path}} ({{author-name}} via CMS)'
+
+# Lets `npx decap-server` proxy the editor to this folder during local
+# development. Decap ignores this on the live site.
+local_backend: true
+
+site_url: https://encountersinjoy.org
+display_url: https://encountersinjoy.org
+logo_url: https://encountersinjoy.org/EIJ%20logo.png
+
+# Where photos uploaded through the editor are stored / served from.
+media_folder: images/blog
+public_folder: /images/blog
+
+slug:
+  encoding: ascii
+  clean_accents: true
+
+collections:
+  - name: posts
+    label: Blog Posts
+    label_singular: Blog Post
+    description: Write a post, then click Publish at the top. It appears on the website within a minute or two. Turn on "Save as draft" to keep working on it without publishing.
+    folder: blog/posts
+    create: true
+    delete: true
+    # File name (and web address) comes from the title: "Grief in the Holidays" → blog/grief-in-the-holidays/
+    slug: "{{slug}}"
+    preview_path: "blog/{{slug}}/"
+    summary: "{{title}} — {{date | date('MMM D, YYYY')}} — {{author}}{{draft | ternary(' (draft)', '')}}"
+    sortable_fields: [date, title, author]
+    view_filters:
+      - label: Drafts
+        field: draft
+        pattern: true
+      - label: Published
+        field: draft
+        pattern: false
+    fields:
+      - label: Title
+        name: title
+        widget: string
+        hint: Plain and clear works best. This also becomes the web address, so it can't be changed after the first save without creating a new post.
+
+      - label: Publish date
+        name: date
+        widget: datetime
+        default: "{{now}}"
+        format: YYYY-MM-DD
+        date_format: MMMM D, YYYY
+        time_format: false
+        picker_utc: false
+        hint: Defaults to today. Shown on the post; newest posts appear first.
+
+      - label: Author
+        name: author
+        widget: select
+        options:
+          - Rev. Jeff Langley
+          - Stephanie Langley
+        default: Rev. Jeff Langley
+
+      - label: Short summary
+        name: summary
+        widget: text
+        required: true
+        hint: One or two sentences. Shown on the blog page and in Google search results.
+
+      - label: Featured photo
+        name: image
+        widget: image
+        required: false
+        allow_multiple: false
+        hint: Optional. A wide (landscape) photo looks best. It's resized automatically, so any size is fine.
+
+      - label: Save as draft (hide from website)
+        name: draft
+        widget: boolean
+        default: false
+        hint: On = saved but not shown on the website. Turn it off when the post is ready.
+
+      - label: Post
+        name: body
+        widget: markdown
+        hint: Use the toolbar for headings, bold, links, quotes, lists and photos.

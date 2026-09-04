@@ -2,6 +2,12 @@
 eij-deploy.zip
 eij-stage/
 
+# Generated blog pages — tools/build-blog.js rebuilds these on every Netlify deploy.
+# (blog/posts/*.md are the source and ARE committed.)
+blog/index.html
+blog/feed.xml
+blog/*/index.html
+
 # Internal / non-public docs (don't publish these on the live site)
 EIJ_Grant_Strategy_Guide.docx
 EIJ_Grant_Strategy_Guide.pdf
@@ -15,6 +21,9 @@ files.zip
 
 # Claude Code local state and build scripts
 .claude/
+
+# Netlify CLI local state
+.netlify/
 
 # OS metadata
 .DS_Store

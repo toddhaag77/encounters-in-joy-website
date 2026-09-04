@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Blog Editor · Encounters in Joy</title>
+  <link rel="icon" href="/EIJ%20logo.png">
+</head>
+<body>
+  <!--
+    Decap CMS (open source) — the blog editor at https://encountersinjoy.org/admin/
+    Settings live in config.yml next to this file. Logins are handled by DecapBridge.
+    To update the editor, change the version number below (see README.md).
+  -->
+  <script src="https://unpkg.com/decap-cms@3.16.0/dist/decap-cms.js"></script>
+  <script>
+    // Make the live-preview pane (right side of the editor) look like the real post.
+    CMS.registerPreviewStyle('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:wght@300;400;500;600&display=swap');
+    CMS.registerPreviewStyle([
+      'body { background: #f9f7f6; margin: 0; }',
+      '.preview { max-width: 42rem; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; font-family: "Source Sans 3", sans-serif; color: #44403c; }',
+      '.preview .eyebrow { color: #a72017; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; margin: 0 0 0.75rem; }',
+      '.preview h1 { font-family: "Cormorant Garamond", serif; font-size: 2.5rem; font-weight: 600; line-height: 1.15; color: #65100b; margin: 0 0 0.75rem; }',
+      '.preview .summary { font-size: 1.15rem; color: #57534e; margin: 0 0 1rem; }',
+      '.preview .byline { font-size: 0.9rem; color: #78716c; margin: 0 0 2rem; }',
+      '.preview .featured { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 1rem; margin-bottom: 2rem; }',
+      '.preview .draft { display: inline-block; background: #fff8e1; color: #8a5a16; border: 1px solid #ffe085; border-radius: 999px; padding: 0.2rem 0.7rem; font-size: 0.75rem; font-weight: 600; margin-bottom: 1rem; }',
+      '.post-body { font-size: 1.125rem; line-height: 1.8; }',
+      '.post-body > * + * { margin-top: 1.25em; }',
+      '.post-body h1, .post-body h2, .post-body h3, .post-body h4 { font-family: "Cormorant Garamond", serif; font-weight: 600; line-height: 1.2; color: #65100b; }',
+      '.post-body h2 { font-size: 2rem; margin-top: 2em; }',
+      '.post-body h3 { font-size: 1.5rem; margin-top: 1.75em; color: #8f2e24; }',
+      '.post-body a { color: #a72017; }',
+      '.post-body blockquote { border-left: 3px solid #f2cc5a; padding-left: 1.5rem; margin-left: 0; font-family: "Cormorant Garamond", serif; font-style: italic; font-size: 1.5rem; line-height: 1.4; color: #8f2e24; }',
+      '.post-body img { max-width: 100%; height: auto; border-radius: 1rem; }',
+      '.post-body ul { list-style: disc; padding-left: 1.5rem; }',
+      '.post-body ol { list-style: decimal; padding-left: 1.5rem; }',
+    ].join('\n'), { raw: true });
+
+    var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    function prettyDate(value) {
+      if (!value) return '';
+      var s = typeof value === 'string' ? value : (value.toISOString ? value.toISOString() : String(value));
+      var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s);
+      return m ? MONTHS[Number(m[2]) - 1] + ' ' + Number(m[3]) + ', ' + m[1] : s;
+    }
+
+    var PostPreview = createClass({
+      render: function () {
+        var entry = this.props.entry;
+        var get = function (field) { return entry.getIn(['data', field]); };
+        var image = get('image');
+        var imageSrc = image ? this.props.getAsset(image).toString() : null;
+
+        return h('article', { className: 'preview' },
+          get('draft') ? h('p', { className: 'draft' }, 'Draft — not shown on the website') : null,
+          h('p', { className: 'eyebrow' }, 'Blog · ' + prettyDate(get('date'))),
+          h('h1', {}, get('title') || 'Untitled post'),
+          get('summary') ? h('p', { className: 'summary' }, get('summary')) : null,
+          h('p', { className: 'byline' }, 'By ' + (get('author') || '—')),
+          imageSrc ? h('img', { className: 'featured', src: imageSrc, alt: '' }) : null,
+          h('div', { className: 'post-body' }, this.props.widgetFor('body'))
+        );
+      }
+    });
+    CMS.registerPreviewTemplate('posts', PostPreview);
+  </script>
+</body>
+</html>
