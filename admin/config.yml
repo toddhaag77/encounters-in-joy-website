@@ -9,9 +9,12 @@ backend:
   repo: toddhaag77/encounters-in-joy-website
   branch: main
   # DecapBridge (https://decapbridge.com, free tier) handles logins so authors
-  # never need a GitHub account. After creating the site there, replace the
-  # placeholder below with the Site ID it gives you.
-  identity_url: https://auth.decapbridge.com/sites/REPLACE_WITH_DECAPBRIDGE_SITE_ID
+  # never need a GitHub account. The values below are copied from the site's
+  # "config.yml" tab in the DecapBridge dashboard (PKCE flow; needs Decap ≥ 3.8.3).
+  auth_type: pkce
+  base_url: https://auth.decapbridge.com
+  auth_endpoint: /sites/c27bf52a-248b-472b-90a4-390a1c189aec/pkce
+  auth_token_endpoint: /sites/c27bf52a-248b-472b-90a4-390a1c189aec/token
   gateway_url: https://gateway.decapbridge.com
   commit_messages:
     create: 'Blog: add "{{slug}}" ({{author-name}} via CMS)'
@@ -19,6 +22,14 @@ backend:
     delete: 'Blog: delete "{{slug}}" ({{author-name}} via CMS)'
     uploadMedia: 'Blog: upload {{path}} ({{author-name}} via CMS)'
     deleteMedia: 'Blog: remove {{path}} ({{author-name}} via CMS)'
+
+# Lets DecapBridge pass the logged-in author's name/email through to Decap
+# (recommended by DecapBridge for the PKCE flow).
+auth:
+  email_claim: email
+  first_name_claim: first_name
+  last_name_claim: last_name
+  avatar_url_claim: avatar_url
 
 # Lets `npx decap-server` proxy the editor to this folder during local
 # development. Decap ignores this on the live site.

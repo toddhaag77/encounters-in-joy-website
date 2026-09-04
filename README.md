@@ -50,20 +50,22 @@ you save land in `blog/posts/`; run the build again to see them.
 Turn on **Save as draft** to save without publishing. To edit or unpublish later,
 open the post from the list; drafts are hidden from the website but kept.
 
-### One-time setup (site owner)
+### Login setup (DecapBridge)
 
 Logins are handled by [DecapBridge](https://decapbridge.com) (free for up to 3 sites
-/ 10 authors) so authors never need a GitHub account:
+/ 10 authors) so authors never need a GitHub account. The site is registered there
+under the owner's account (repo `toddhaag77/encounters-in-joy-website`, CMS URL
+`https://encountersinjoy.org/admin/`, PKCE auth), and the matching backend block
+lives in `admin/config.yml`.
 
-1. Create an account at decapbridge.com and click **Create New Site**.
-2. Repository: `toddhaag77/encounters-in-joy-website` · branch `main` ·
-   CMS URL: `https://encountersinjoy.org/admin/`. It will ask for a GitHub
-   fine-grained personal access token with **Contents: read/write** and
-   **Pull requests: read/write** on that repo.
-3. Copy the **Site ID** it gives you into `admin/config.yml`, replacing
-   `REPLACE_WITH_DECAPBRIDGE_SITE_ID`, and push.
-4. In the DecapBridge dashboard, **Manage Collaborators → invite** each author by
-   email. They get a link to set up their login.
+- **Invite an author:** DecapBridge dashboard → My Sites → the site →
+  **Manage collaborators** → enter their email → *Send invitation email*. They
+  get a link to set up a Google, Microsoft, or password login.
+- **If the GitHub token expires or is revoked:** dashboard → the site →
+  **Settings** → paste a new fine-grained token (Contents + Pull requests:
+  read/write on the repo).
+- **If the backend block ever needs regenerating:** dashboard → the site →
+  **config.yml** tab; copy it over the `backend:` block in `admin/config.yml`.
 
 ### How it works
 
