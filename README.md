@@ -103,6 +103,7 @@ The editor version is pinned in `admin/index.html`
 | `intake.html` | Intake-forms download page |
 | `donate.html` | Donation page |
 | `encounters_in_joy_intake-YYYY-MM.pdf` | Counseling intake PDF (download/print/bring). Exported from the ministry's Word master; the filename carries the revision. See [Revising the intake form](#revising-the-intake-form). |
+| `intake-source/*.docx` | The Word masters the intake PDFs are exported from. Kept in git so revisions are reproducible; stripped from the deploy by the build command, so they are not downloadable from the site. |
 | `admin/` | Blog editor (Decap CMS) and its `config.yml` |
 | `blog/posts/*.md` | Blog post source files (the only blog files in git) |
 | `tools/build-blog.js`, `tools/blog-templates.js` | Blog build script and page templates |
@@ -120,6 +121,13 @@ The published PDF carries its revision in the filename —
 form's own footer. That way a new revision is a genuinely new URL, so no browser
 or CDN can serve someone the previous form, and a counselor holding a printed
 page can tell which file it came from.
+
+The Word master each PDF was exported from lives beside it in
+`intake-source/`, under the same name. That keeps a revision reproducible
+instead of depending on a file in somebody's Downloads folder. The build command
+deletes `intake-source/` from the deploy, so the editable masters stay in git
+without being downloadable from the site — if you ever move or rename that
+folder, update the build command in `netlify.toml` to match.
 
 Two stable paths always point at the current revision, via 302 redirects in
 `netlify.toml`:
@@ -140,30 +148,34 @@ less forever, which would make the alias impossible to re-point.
    ```powershell
    $word = New-Object -ComObject Word.Application
    $doc  = $word.Documents.Open("C:\path\to\revised.docx", $false, $true)
-   $doc.ComputeStatistics(2)          # page count - you need this for step 3
+   $doc.ComputeStatistics(2)          # page count — you need this for step 4
    $doc.SaveAs([ref]"C:\path\to\EIJ\encounters_in_joy_intake-YYYY-MM.pdf", [ref]17)
    $doc.Close($false); $word.Quit()
    ```
 
    Name it for the `Rev MM/YY` in the new form's footer.
 
-2. **Delete the previous revision's PDF.** Old revisions are recoverable from git
-   history; leaving them deployed just invites someone to print the wrong one.
+2. **Commit the `.docx` to `intake-source/`** under the same name as the PDF, so
+   the master and the file it produced always travel together.
 
-3. **Update `intake.html`** — the `href` on the download button, and the page
+3. **Delete the previous revision's PDF and its master.** Both stay recoverable
+   from git history; leaving the old PDF deployed just invites someone to print
+   the wrong one.
+
+4. **Update `intake.html`** — the `href` on the download button, and the page
    count in the card (`PDF · N pages`). If the form got materially longer or
    shorter, revisit the "about 45–60 minutes" estimate in the body copy *and* in
    the `<meta name="description">`, which otherwise contradicts the page.
 
-4. **Update `netlify.toml`** — both redirect targets and the `immutable`
+5. **Update `netlify.toml`** — both redirect targets and the `immutable`
    cache-header path, all four of which name the versioned file.
 
-5. **Re-read the form for instructions the download card should surface.** The
+6. **Re-read the form for instructions the download card should surface.** The
    08/25 revision, for instance, says pages 7–8 are the counselee's to keep and
    that married couples each need their own copy of pages 9–15 — things someone
    printing at home needs to know before they hit print.
 
-6. **Push, then verify against the live site,** not just the local preview:
+7. **Push, then verify against the live site,** not just the local preview:
 
    ```bash
    curl -sI https://encountersinjoy.org/intake-form.pdf          # 302 to the new file

@@ -1,0 +1,7 @@
+# The repo is edited on Windows with core.autocrlf=true. Git detects binary
+# files on its own, but these are stated explicitly so no future setting can
+# line-ending-mangle a Word master or a PDF into corruption.
+*.docx binary
+*.pdf  binary
+*.png  binary
+*.jpg  binary

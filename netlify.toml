@@ -4,8 +4,15 @@
 # (blog/posts/*.md, written in the CMS at /admin/) into web pages.
 # See tools/build-blog.js.
 
+# The site publishes the whole repo root, so anything committed here is
+# downloadable from encountersinjoy.org. intake-source/ holds the editable Word
+# masters for the intake form -- kept in git so a revision is reproducible, but
+# stripped from the deploy: nobody should be able to pull an editable copy of
+# the form off the ministry's domain, or have a search engine surface the .docx
+# instead of the PDF. Deleting it here only touches Netlify's build checkout,
+# never the repo.
 [build]
-  command = "node tools/build-blog.js"
+  command = "node tools/build-blog.js && rm -rf intake-source"
   publish = "."
 
 [build.environment]
