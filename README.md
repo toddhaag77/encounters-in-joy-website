@@ -102,7 +102,7 @@ The editor version is pinned in `admin/index.html`
 | `grief.html`, `why-no-insurance.html`, `counseling-*-ga.html` | Service and city landing pages |
 | `intake.html` | Intake-forms download page |
 | `donate.html` | Donation page |
-| `encounters_in_joy_intake.pdf` | Counseling intake PDF (download/print/bring) |
+| `encounters_in_joy_intake.pdf` | Counseling intake PDF (download/print/bring). Exported straight from the ministry's Word master; replace the whole file when Jeff revises it. The older `.claude/build_intake_pdf.py` generator is superseded and no longer matches this form. |
 | `admin/` | Blog editor (Decap CMS) and its `config.yml` |
 | `blog/posts/*.md` | Blog post source files (the only blog files in git) |
 | `tools/build-blog.js`, `tools/blog-templates.js` | Blog build script and page templates |
