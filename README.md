@@ -102,7 +102,7 @@ The editor version is pinned in `admin/index.html`
 | `grief.html`, `why-no-insurance.html`, `counseling-*-ga.html` | Service and city landing pages |
 | `intake.html` | Intake-forms download page |
 | `donate.html` | Donation page |
-| `encounters_in_joy_intake.pdf` | Counseling intake PDF (download/print/bring). Exported straight from the ministry's Word master; replace the whole file when Jeff revises it. The older `.claude/build_intake_pdf.py` generator is superseded and no longer matches this form. |
+| `encounters_in_joy_intake-YYYY-MM.pdf` | Counseling intake PDF (download/print/bring). Exported from the ministry's Word master; the filename carries the revision. See [Revising the intake form](#revising-the-intake-form). |
 | `admin/` | Blog editor (Decap CMS) and its `config.yml` |
 | `blog/posts/*.md` | Blog post source files (the only blog files in git) |
 | `tools/build-blog.js`, `tools/blog-templates.js` | Blog build script and page templates |
@@ -112,6 +112,63 @@ The editor version is pinned in `admin/index.html`
 | `robots.txt` | Crawler directives |
 | `Jeff.jpg`, `Stephanie.jpg` | Counselor headshots (also used as blog author photos) |
 | `WatercolorApple(4).png`, `eij with words.png`, `EIJ logo.png` | Logo assets |
+
+## Revising the intake form
+
+The published PDF carries its revision in the filename —
+`encounters_in_joy_intake-2025-08.pdf` — matching the `Rev MM/YY` printed in the
+form's own footer. That way a new revision is a genuinely new URL, so no browser
+or CDN can serve someone the previous form, and a counselor holding a printed
+page can tell which file it came from.
+
+Two stable paths always point at the current revision, via 302 redirects in
+`netlify.toml`:
+
+- **`/intake-form.pdf`** — the durable link. Use this one in emails, on business
+  cards, anywhere printed. It never changes.
+- **`/encounters_in_joy_intake.pdf`** — the old unversioned path, kept alive so
+  links shared before September 2026 keep working.
+
+The redirects are deliberately `302`, not `301`: browsers cache a 301 more or
+less forever, which would make the alias impossible to re-point.
+
+### When Jeff sends a revised Word document
+
+1. **Export it to PDF with Word itself** (not a converter — Word preserves the
+   cover page, logo, and the form's spacing). From PowerShell:
+
+   ```powershell
+   $word = New-Object -ComObject Word.Application
+   $doc  = $word.Documents.Open("C:\path\to\revised.docx", $false, $true)
+   $doc.ComputeStatistics(2)          # page count - you need this for step 3
+   $doc.SaveAs([ref]"C:\path\to\EIJ\encounters_in_joy_intake-YYYY-MM.pdf", [ref]17)
+   $doc.Close($false); $word.Quit()
+   ```
+
+   Name it for the `Rev MM/YY` in the new form's footer.
+
+2. **Delete the previous revision's PDF.** Old revisions are recoverable from git
+   history; leaving them deployed just invites someone to print the wrong one.
+
+3. **Update `intake.html`** — the `href` on the download button, and the page
+   count in the card (`PDF · N pages`). If the form got materially longer or
+   shorter, revisit the "about 45–60 minutes" estimate in the body copy *and* in
+   the `<meta name="description">`, which otherwise contradicts the page.
+
+4. **Update `netlify.toml`** — both redirect targets and the `immutable`
+   cache-header path, all four of which name the versioned file.
+
+5. **Re-read the form for instructions the download card should surface.** The
+   08/25 revision, for instance, says pages 7–8 are the counselee's to keep and
+   that married couples each need their own copy of pages 9–15 — things someone
+   printing at home needs to know before they hit print.
+
+6. **Push, then verify against the live site,** not just the local preview:
+
+   ```bash
+   curl -sI https://encountersinjoy.org/intake-form.pdf          # 302 to the new file
+   curl -s https://encountersinjoy.org/encounters_in_joy_intake-YYYY-MM.pdf -o live.pdf
+   ```
 
 ## Deploys
 

@@ -18,3 +18,51 @@
   [headers.values]
     Cache-Control = "no-cache"
     X-Robots-Tag = "noindex"
+
+# ---------------------------------------------------------------------------
+# Counseling intake PDF
+#
+# The published file carries its revision in the name
+# (encounters_in_joy_intake-YYYY-MM.pdf, matching the "Rev MM/YY" printed in
+# the form's own footer). A new revision means a new filename, so no browser
+# or CDN can hand someone a stale copy of the old form.
+#
+# Two stable paths point at whatever the current revision is:
+#   /intake-form.pdf                 - the durable link to use in emails,
+#                                      business cards, anything printed
+#   /encounters_in_joy_intake.pdf    - the old unversioned path, kept alive
+#                                      so links shared before 09/2026 still work
+#
+# Both are 302 (temporary) on purpose: a 301 gets cached by browsers forever
+# and could not be re-pointed at the next revision.
+# ---------------------------------------------------------------------------
+
+[[redirects]]
+  from = "/intake-form.pdf"
+  to = "/encounters_in_joy_intake-2025-08.pdf"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/encounters_in_joy_intake.pdf"
+  to = "/encounters_in_joy_intake-2025-08.pdf"
+  status = 302
+  force = true
+
+# The versioned file never changes content, so let it cache hard.
+[[headers]]
+  for = "/encounters_in_joy_intake-2025-08.pdf"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# The aliases must never be cached, or they would keep pointing at the
+# revision that was current when the visitor first followed them.
+[[headers]]
+  for = "/intake-form.pdf"
+  [headers.values]
+    Cache-Control = "no-store"
+
+[[headers]]
+  for = "/encounters_in_joy_intake.pdf"
+  [headers.values]
+    Cache-Control = "no-store"
