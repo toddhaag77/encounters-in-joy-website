@@ -2,8 +2,9 @@
 title: Welcome to the Encounters in Joy blog
 date: 2026-09-01
 author: Rev. Jeff Langley
-summary: A few words about why we're starting to write here, and what you can expect to find when you visit.
-draft: true
+summary: A few words about why we're starting to write here, and what you can
+  expect to find when you visit.
+draft: false
 ---
 For thirty-five years, most of the conversations that mattered in this ministry have happened in a room with the door closed. That's still true, and it should be. But over the years we've noticed the same questions come up again and again — in the office, after church, in the grocery store line — and we've started to think some of them deserve a longer answer than we can give in passing.
 
