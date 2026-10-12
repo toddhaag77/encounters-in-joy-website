@@ -99,6 +99,9 @@ The editor version is pinned in `admin/index.html`
 | File | Purpose |
 |---|---|
 | `index.html` | Homepage |
+| `about.html` | About page: mission statement, programs, team, and the nonprofit details (legal name, EIN, office address). See [Nonprofit details](#nonprofit-details-google-for-nonprofits). |
+| `services.html` | Programs and services |
+| `contact.html` | Contact page (address, phone, email, and the lead form) |
 | `grief.html`, `why-no-insurance.html`, `counseling-*-ga.html` | Service and city landing pages |
 | `intake.html` | Intake-forms download page |
 | `donate.html` | Donation page |
@@ -113,6 +116,33 @@ The editor version is pinned in `admin/index.html`
 | `robots.txt` | Crawler directives |
 | `Jeff.jpg`, `Stephanie.jpg` | Counselor headshots (also used as blog author photos) |
 | `WatercolorApple(4).png`, `eij with words.png`, `EIJ logo.png` | Logo assets |
+
+## Nonprofit details (Google for Nonprofits)
+
+Google for Nonprofits reviews this site before it will apply nonprofit pricing
+to the `encountersinjoy.org` Google Workspace account. It requires the site to
+show four things. Keep all four in place:
+
+- **The EIN (83-4371871).** It is in the footer of every page (the line under
+  the brand blurb), on `about.html`, `contact.html`, `donate.html`, and in the
+  homepage's "Our mission" box.
+- **A physical street address.** Already in every footer; also on `about.html`
+  and `contact.html`.
+- **A mission statement that describes the programs.** On `about.html`
+  (`#mission`) and in the homepage's "Our mission" box. If the wording changes,
+  change it in all three places: those two, and the organization `description`
+  in the JSON-LD block in the `<head>` of `about.html`.
+- **Separate pages, not one long page.** The top menu's About, Services, and
+  Contact links go to their own pages. Don't turn them back into `#anchor`
+  links to homepage sections — Google for Nonprofits does not accept
+  single-page website layouts.
+
+The footer and menu are repeated by hand in every page, so a change to either
+has to be made in each `.html` file, in `tools/blog-templates.js` (the blog's
+copy), and in `.claude/build_city_pages.py`, the local generator for the six
+`counseling-*-ga.html` pages. That script is not in git (`.claude/` is
+ignored); if you run it, check that its NAV and FOOTER match the committed
+pages first, or it will overwrite them.
 
 ## Revising the intake form
 

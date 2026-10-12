@@ -195,13 +195,13 @@ function nav({ mobileBackHref, mobileBackLabel }) {
         Encounters in Joy
       </a>
       <div class="hidden md:flex items-center gap-6 text-sm font-medium text-stone-600">
-        <a href="/#about" class="hover:text-crimson-700">About</a>
-        <a href="/#services" class="hover:text-crimson-700">Services</a>
-        <a href="/#team" class="hover:text-crimson-700">Our Team</a>
+        <a href="/about.html" class="hover:text-crimson-700">About</a>
+        <a href="/services.html" class="hover:text-crimson-700">Services</a>
         <a href="/#faq" class="hover:text-crimson-700">FAQ</a>
         <a href="/blog/" class="text-crimson-700 font-semibold" aria-current="page">Blog</a>
         <a href="/intake.html" class="hover:text-crimson-700">Forms</a>
         <a href="/donate.html" class="hover:text-crimson-700">Donate</a>
+        <a href="/contact.html" class="hover:text-crimson-700">Contact</a>
         <a href="tel:7708071227" class="inline-flex items-center gap-1.5 text-crimson-700 hover:text-crimson-900 font-semibold">
           ${PHONE_ICON}
           770-807-1227
@@ -254,7 +254,8 @@ function footer() {
             <img src="/WatercolorApple(4).png" alt="" loading="lazy" decoding="async" width="320" height="320" class="h-10 w-auto">
             <p class="font-display text-xl font-semibold text-gold-300">Encounters in Joy, Inc.</p>
           </div>
-          <p class="text-cream-300 text-sm leading-relaxed mb-5">A 501(c)(3) ministry providing professional, faith-grounded counseling for individuals, couples, and families across Barrow County and beyond. Sliding scale &amp; scholarships available.</p>
+          <p class="text-cream-300 text-sm leading-relaxed mb-3">A 501(c)(3) ministry providing professional, faith-grounded counseling for individuals, couples, and families across Barrow County and beyond. Sliding scale &amp; scholarships available.</p>
+          <p class="text-cream-300 text-sm leading-relaxed mb-5">501(c)(3) nonprofit organization &middot; EIN 83-4371871</p>
         </div>
         <div>
           <p class="font-display text-lg font-semibold text-gold-300 mb-4">Quick contact</p>
@@ -262,6 +263,9 @@ function footer() {
             <li><a href="tel:7708071227" class="hover:text-white">770-807-1227</a></li>
             <li><a href="mailto:brojefflangley@encountersinjoy.org" class="hover:text-white break-all">brojefflangley@encountersinjoy.org</a></li>
             <li>2064 Highway 82<br>Statham, GA 30666</li>
+            <li><a href="/about.html" class="hover:text-white">About us</a></li>
+            <li><a href="/services.html" class="hover:text-white">Services</a></li>
+            <li><a href="/contact.html" class="hover:text-white">Contact</a></li>
             <li><a href="/blog/" class="hover:text-white">Blog</a></li>
             <li><a href="/donate.html" class="hover:text-white">Donate</a></li>
             <li class="text-cream-400 text-xs italic mt-2">Crisis: 911 · Lifeline: 988</li>
