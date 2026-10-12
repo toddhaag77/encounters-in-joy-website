@@ -90,7 +90,11 @@
       }
     }
   </script>
-  <style>body { font-family: 'Source Sans 3', sans-serif; }</style>
+  <style>
+    body { font-family: 'Source Sans 3', sans-serif; }
+    .mobile-menu { max-height: 0; overflow: hidden; visibility: hidden; transition: max-height 0.35s ease, visibility 0s linear 0.35s; }
+    .mobile-menu.open { max-height: 560px; visibility: visible; transition: max-height 0.35s ease, visibility 0s; }
+  </style>
 </head>
 <body class="bg-cream-50 text-stone-800">
 
@@ -101,7 +105,8 @@
         <img src="EIJ logo.png" alt="" class="h-8 w-auto">
         Encounters in Joy
       </a>
-      <div class="hidden md:flex items-center gap-6 text-sm font-medium text-stone-600">
+      <!-- Desktop links -->
+      <div class="hidden lg:flex items-center gap-6 text-sm font-medium text-stone-600">
         <a href="about.html" class="hover:text-crimson-700">About</a>
         <a href="services.html" class="hover:text-crimson-700">Services</a>
         <a href="index.html#faq" class="hover:text-crimson-700">FAQ</a>
@@ -109,14 +114,38 @@
         <a href="intake.html" class="hover:text-crimson-700">Forms</a>
         <a href="donate.html" class="hover:text-crimson-700">Donate</a>
         <a href="contact.html" class="hover:text-crimson-700">Contact</a>
-        <a href="tel:7708071227" class="inline-flex items-center gap-1.5 text-crimson-700 hover:text-crimson-900 font-semibold">
+        <a href="tel:7708071227" class="inline-flex items-center gap-1.5 whitespace-nowrap text-crimson-700 hover:text-crimson-900 font-semibold">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
           770-807-1227
         </a>
-        <a href="#contact" class="bg-gold-400 text-brown-900 font-semibold px-5 py-2 rounded-full hover:bg-gold-300">Take the first step</a>
+        <a href="#contact" class="bg-gold-400 text-brown-900 font-semibold px-5 py-2 rounded-full whitespace-nowrap hover:bg-gold-300">Take the first step</a>
       </div>
-      <a href="donate.html" class="md:hidden text-sm text-crimson-700 font-medium">Donate</a>
-      <a href="index.html" class="md:hidden text-sm text-crimson-700 font-medium">&larr; Home</a>
+      <!-- Mobile actions -->
+      <div class="lg:hidden flex items-center gap-1">
+        <a href="tel:7708071227" class="text-crimson-700 p-2" aria-label="Call 770-807-1227">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+        </a>
+        <button id="menuBtn" class="text-crimson-800 p-2" aria-label="Menu" aria-controls="mobileMenu" aria-expanded="false">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="mobile-menu lg:hidden bg-cream-50 border-t border-cream-200">
+      <div class="px-6 py-4 flex flex-col gap-3 text-sm font-medium text-stone-700">
+        <a href="about.html" class="py-2">About</a>
+        <a href="services.html" class="py-2">Services</a>
+        <a href="index.html#faq" class="py-2">FAQ</a>
+        <a href="blog/" class="py-2">Blog</a>
+        <a href="intake.html" class="py-2">Forms</a>
+        <a href="donate.html" class="py-2">Donate</a>
+        <a href="contact.html" class="py-2">Contact</a>
+        <a href="tel:7708071227" class="inline-flex items-center gap-2 py-2 text-crimson-700 font-semibold">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+          Call &amp; leave a voicemail &middot; 770-807-1227
+        </a>
+        <a href="#contact" class="bg-gold-400 text-brown-900 font-semibold px-5 py-2.5 rounded-full text-center">Take the first step</a>
+      </div>
     </div>
   </nav>
 
@@ -393,6 +422,22 @@
   <div class="md:hidden h-14"></div>
 
   <script>
+    // Mobile menu toggle
+    (function() {
+      const btn = document.getElementById('menuBtn');
+      const menu = document.getElementById('mobileMenu');
+      btn.addEventListener('click', () => {
+        btn.setAttribute('aria-expanded', String(menu.classList.toggle('open')));
+      });
+      // Close mobile menu on link click
+      menu.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+          menu.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        });
+      });
+    })();
+
     function submitLead(e) {
       e.preventDefault();
       const form = e.target;

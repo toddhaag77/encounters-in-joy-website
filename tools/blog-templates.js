@@ -148,6 +148,10 @@ function head({ title, description, url, image, imageAlt, ogType, structuredData
   <style>
     body { font-family: 'Source Sans 3', sans-serif; }
 
+    /* Mobile menu */
+    .mobile-menu { max-height: 0; overflow: hidden; visibility: hidden; transition: max-height 0.35s ease, visibility 0s linear 0.35s; }
+    .mobile-menu.open { max-height: 560px; visibility: visible; transition: max-height 0.35s ease, visibility 0s; }
+
     /* Article typography. Tailwind's reset strips list bullets, heading sizes,
        etc., so the post body gets its own small stylesheet that matches the
        rest of the site. */
@@ -185,7 +189,7 @@ function head({ title, description, url, image, imageAlt, ogType, structuredData
 </head>`;
 }
 
-function nav({ mobileBackHref, mobileBackLabel }) {
+function nav() {
   return `
   <!-- Nav -->
   <nav class="bg-cream-50 border-b border-cream-200">
@@ -194,7 +198,8 @@ function nav({ mobileBackHref, mobileBackLabel }) {
         <img src="/EIJ%20logo.png" alt="" class="h-8 w-auto">
         Encounters in Joy
       </a>
-      <div class="hidden md:flex items-center gap-6 text-sm font-medium text-stone-600">
+      <!-- Desktop links -->
+      <div class="hidden lg:flex items-center gap-6 text-sm font-medium text-stone-600">
         <a href="/about.html" class="hover:text-crimson-700">About</a>
         <a href="/services.html" class="hover:text-crimson-700">Services</a>
         <a href="/#faq" class="hover:text-crimson-700">FAQ</a>
@@ -202,14 +207,38 @@ function nav({ mobileBackHref, mobileBackLabel }) {
         <a href="/intake.html" class="hover:text-crimson-700">Forms</a>
         <a href="/donate.html" class="hover:text-crimson-700">Donate</a>
         <a href="/contact.html" class="hover:text-crimson-700">Contact</a>
-        <a href="tel:7708071227" class="inline-flex items-center gap-1.5 text-crimson-700 hover:text-crimson-900 font-semibold">
+        <a href="tel:7708071227" class="inline-flex items-center gap-1.5 whitespace-nowrap text-crimson-700 hover:text-crimson-900 font-semibold">
           ${PHONE_ICON}
           770-807-1227
         </a>
-        <a href="/#contact" class="bg-gold-400 text-brown-900 font-semibold px-5 py-2 rounded-full hover:bg-gold-300">Take the first step</a>
+        <a href="/#contact" class="bg-gold-400 text-brown-900 font-semibold px-5 py-2 rounded-full whitespace-nowrap hover:bg-gold-300">Take the first step</a>
       </div>
-      <a href="/donate.html" class="md:hidden text-sm text-crimson-700 font-medium">Donate</a>
-      <a href="${esc(mobileBackHref)}" class="md:hidden text-sm text-crimson-700 font-medium">&larr; ${esc(mobileBackLabel)}</a>
+      <!-- Mobile actions -->
+      <div class="lg:hidden flex items-center gap-1">
+        <a href="tel:7708071227" class="text-crimson-700 p-2" aria-label="Call 770-807-1227">
+          ${PHONE_ICON.replace('w-4 h-4', 'w-5 h-5')}
+        </a>
+        <button id="menuBtn" class="text-crimson-800 p-2" aria-label="Menu" aria-controls="mobileMenu" aria-expanded="false">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="mobile-menu lg:hidden bg-cream-50 border-t border-cream-200">
+      <div class="px-6 py-4 flex flex-col gap-3 text-sm font-medium text-stone-700">
+        <a href="/about.html" class="py-2">About</a>
+        <a href="/services.html" class="py-2">Services</a>
+        <a href="/#faq" class="py-2">FAQ</a>
+        <a href="/blog/" class="py-2 text-crimson-700 font-semibold" aria-current="page">Blog</a>
+        <a href="/intake.html" class="py-2">Forms</a>
+        <a href="/donate.html" class="py-2">Donate</a>
+        <a href="/contact.html" class="py-2">Contact</a>
+        <a href="tel:7708071227" class="inline-flex items-center gap-2 py-2 text-crimson-700 font-semibold">
+          ${PHONE_ICON}
+          Call &amp; leave a voicemail &middot; 770-807-1227
+        </a>
+        <a href="/#contact" class="bg-gold-400 text-brown-900 font-semibold px-5 py-2.5 rounded-full text-center">Take the first step</a>
+      </div>
     </div>
   </nav>`;
 }
@@ -311,6 +340,27 @@ function mobileBar() {
     </a>
   </div>
   <div class="md:hidden h-14"></div>`;
+}
+
+function menuScript() {
+  return `
+  <script>
+    // Mobile menu toggle (same behaviour as the rest of the site)
+    (function() {
+      var btn = document.getElementById('menuBtn');
+      var menu = document.getElementById('mobileMenu');
+      btn.addEventListener('click', function () {
+        btn.setAttribute('aria-expanded', String(menu.classList.toggle('open')));
+      });
+      // Close mobile menu on link click
+      menu.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          menu.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        });
+      });
+    })();
+  </script>`;
 }
 
 function trackingScript() {
@@ -449,7 +499,7 @@ function postPage(p, others, img) {
     structuredData,
   })}
 <body class="bg-cream-50 text-stone-800">
-${nav({ mobileBackHref: '/blog/', mobileBackLabel: 'Blog' })}
+${nav()}
 
   <article>
     <!-- Title -->
@@ -481,6 +531,7 @@ ${ctaSection()}
 ${crisisBanner()}
 ${footer()}
 ${mobileBar()}
+${menuScript()}
 ${trackingScript()}
 </body>
 </html>
@@ -534,7 +585,7 @@ function indexPage(posts, img) {
     structuredData,
   })}
 <body class="bg-cream-50 text-stone-800">
-${nav({ mobileBackHref: '/', mobileBackLabel: 'Home' })}
+${nav()}
 
   <!-- Hero -->
   <section class="relative overflow-hidden">
@@ -562,6 +613,7 @@ ${ctaSection()}
 ${crisisBanner()}
 ${footer()}
 ${mobileBar()}
+${menuScript()}
 ${trackingScript()}
 </body>
 </html>
