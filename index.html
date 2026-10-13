@@ -228,7 +228,9 @@
 
     /* Mobile menu */
     .mobile-menu { max-height: 0; overflow: hidden; visibility: hidden; transition: max-height 0.35s ease, visibility 0s linear 0.35s; }
-    .mobile-menu.open { max-height: 560px; visibility: visible; transition: max-height 0.35s ease, visibility 0s; }
+    /* The nav is fixed, so on a short screen the open menu scrolls inside itself instead of running off the bottom.
+       The first max-height is the fallback for browsers without dvh units. */
+    .mobile-menu.open { max-height: 560px; max-height: min(560px, calc(100dvh - 6.25rem)); overflow-y: auto; overscroll-behavior: contain; visibility: visible; transition: max-height 0.35s ease, visibility 0s; }
   </style>
 </head>
 <body class="bg-cream-50 text-stone-800">
@@ -257,10 +259,11 @@
       </div>
       <!-- Mobile actions -->
       <div class="lg:hidden flex items-center gap-1">
-        <a href="tel:7708071227" class="text-crimson-700 p-2" aria-label="Call 770-807-1227">
+        <a href="tel:7708071227" class="inline-flex items-center gap-1.5 whitespace-nowrap text-sm font-semibold text-crimson-700 p-2" aria-label="Call 770-807-1227">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+          <span class="hidden md:inline">770-807-1227</span>
         </a>
-        <button id="menuBtn" class="text-crimson-800 p-2" aria-label="Menu">
+        <button id="menuBtn" class="text-crimson-800 p-2" aria-label="Menu" aria-controls="mobileMenu" aria-expanded="false">
           <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
       </div>
@@ -765,13 +768,25 @@
     });
 
     // Mobile menu toggle
-    document.getElementById('menuBtn').addEventListener('click', () => {
-      document.getElementById('mobileMenu').classList.toggle('open');
-    });
-    // Close mobile menu on link click
-    document.querySelectorAll('#mobileMenu a').forEach(a => {
-      a.addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('open'));
-    });
+    (function() {
+      const btn = document.getElementById('menuBtn');
+      const menu = document.getElementById('mobileMenu');
+      btn.addEventListener('click', () => {
+        btn.setAttribute('aria-expanded', String(menu.classList.toggle('open')));
+      });
+      // Close mobile menu on link click
+      menu.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+          // Same-page links (#contact): close at once, so the page doesn't shift after the jump
+          if (a.getAttribute('href').charAt(0) === '#') {
+            menu.style.transition = 'none';
+            requestAnimationFrame(() => { menu.style.transition = ''; });
+          }
+          menu.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        });
+      });
+    })();
 
     // Lead form submission — posts to Netlify Forms via fetch
     function submitLead(e) {

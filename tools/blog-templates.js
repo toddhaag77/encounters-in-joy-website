@@ -215,8 +215,9 @@ function nav() {
       </div>
       <!-- Mobile actions -->
       <div class="lg:hidden flex items-center gap-1">
-        <a href="tel:7708071227" class="text-crimson-700 p-2" aria-label="Call 770-807-1227">
+        <a href="tel:7708071227" class="inline-flex items-center gap-1.5 whitespace-nowrap text-sm font-semibold text-crimson-700 p-2" aria-label="Call 770-807-1227">
           ${PHONE_ICON.replace('w-4 h-4', 'w-5 h-5')}
+          <span class="hidden md:inline">770-807-1227</span>
         </a>
         <button id="menuBtn" class="text-crimson-800 p-2" aria-label="Menu" aria-controls="mobileMenu" aria-expanded="false">
           <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
