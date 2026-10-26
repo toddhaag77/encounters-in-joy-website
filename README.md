@@ -9,6 +9,7 @@ counseling ministry based in Statham, GA, serving Barrow County and surrounding 
 - Hosted on Netlify
 - Lead form via Netlify Forms
 - Blog: [Decap CMS](https://decapcms.org/) editor at `/admin/` + a small build script (no framework, no npm install)
+- Blog comments: Netlify Forms + Netlify Functions + Netlify Blobs, moderated at `/admin/comments.html`
 - Analytics: Google Analytics 4 + Microsoft Clarity
 - Indexed via Google Search Console
 
@@ -34,6 +35,9 @@ also open fine directly in a browser; only the blog needs the build step.)
 To try the blog editor locally, run `npx decap-server` in a second terminal, then open
 `http://localhost:3000/admin/` and click **Login** — no password needed locally. Posts
 you save land in `blog/posts/`; run the build again to see them.
+
+Blog comments need the Netlify Functions running; see
+[Comments → Trying it locally](#trying-it-locally).
 
 ## Blog
 
@@ -77,7 +81,8 @@ lives in `admin/config.yml`.
   entries in `sitemap.xml`. Those generated files are git-ignored.
 - Page templates (nav, footer, article styling) live in `tools/blog-templates.js`.
   `tools/vendor/` holds the two libraries the build uses (marked, js-yaml) so
-  Netlify needs no `npm install`.
+  the blog build needs no `npm install`. (Netlify does install one package, for
+  the comment functions; see [Comments](#comments).)
 - Photos uploaded in the editor go to `images/blog/`. On the live site they are
   served through Netlify's Image CDN (resized + compressed), so big phone photos
   are fine.
@@ -94,6 +99,79 @@ photo + role in the `AUTHORS` list at the top of `tools/blog-templates.js`.
 The editor version is pinned in `admin/index.html`
 (`decap-cms@3.16.0`). Change the number to upgrade.
 
+## Comments
+
+Every blog post ends with share buttons and a comment section. Comments go
+live the moment they're posted; nothing waits for approval. Readers give a
+name, the comment, and (optionally) an email address that is never shown.
+
+### For moderators
+
+- **Netlify emails you about every new comment**, the same way it emails
+  lead-form submissions (the form is called `blog-comment`). If the person
+  left an email address, replying to that email reaches them privately.
+- **To remove a comment or block someone**, go to
+  **encountersinjoy.org/admin/comments.html** and sign in with the comments
+  password. Bookmark it.
+  - **Delete** removes one comment.
+  - **Block & delete** removes the comment and keeps that person's future
+    comments off the site. It matches their email address (if they gave one)
+    and their internet connection, so anyone sharing that connection (the
+    same home or church Wi-Fi) is blocked too. Undo it under **Blocked** at
+    the bottom of the page.
+- Netlify's spam filter stops most junk before it appears. A real comment it
+  flags by mistake never shows on the site; it sits in Netlify → Forms →
+  `blog-comment` → Spam.
+
+### One-time setup (site owner)
+
+1. Netlify → the site → **Site configuration → Environment variables → Add a
+   variable**: key `COMMENTS_ADMIN_PASSWORD`, value a long passphrase (four or
+   more random words), scope **Functions**. Give it to the moderators.
+2. **Deploys → Trigger deploy → Deploy site**, so the functions see the new
+   variable. Until then the moderation page says moderation isn't switched on
+   (comments still post and are kept).
+
+Changing the password later is the same two steps; everyone then signs in again.
+
+### How it works
+
+- The form under each post is a Netlify Form (`blog-comment`) with a honeypot
+  field and Netlify's spam filter. For every submission Netlify accepts, it runs
+  `netlify/functions/submission-created.mjs`, which saves the comment in Netlify
+  Blobs (store `blog-comments`, visible in Netlify under **Blobs**) unless the
+  commenter is blocked.
+- The post page loads its comments from `/api/comments?post=<slug>`
+  (`netlify/functions/comments.mjs`), which returns names, comments and dates
+  only, never email or IP addresses. The moderation page uses
+  `/api/comments/admin` (`netlify/functions/comments-admin.mjs`), which requires
+  the password. Shared storage code is in `netlify/lib/comments.mjs`.
+- The share bar, comment section and the script that shows comments are in
+  `tools/blog-templates.js`.
+- Comments belong to a post's web address. If a post is renamed to a new
+  address, its old comments stay with the old one.
+- The functions use one package, `@netlify/blobs` (`package.json`), which
+  Netlify installs on every deploy.
+- Share buttons are plain links (Facebook, X, email, copy link, plus the phone's
+  own share sheet where the browser has one), with no social-media scripts on
+  the page. Clicks are recorded in Google Analytics as `share` events, and
+  posted comments as `blog_comment`.
+
+### Trying it locally
+
+Run [`netlify dev`](https://docs.netlify.com/cli/local-development/) (Netlify
+CLI) after `npm install` and `node tools/build-blog.js`. It serves the site with
+the functions and a local Blobs store at `http://localhost:8888`. Put
+`COMMENTS_ADMIN_PASSWORD=<anything>` in a `.env` file (git-ignored) to sign in to
+the moderation page.
+
+`netlify dev` doesn't run Netlify Forms, so a comment posted from the page shows
+only until you reload. To save one, send the form event to the function yourself:
+
+```bash
+curl -X POST http://localhost:8888/.netlify/functions/submission-created -H "content-type: application/json" --data '{"payload":{"id":"test1","form_name":"blog-comment","created_at":"2026-10-26T12:00:00Z","data":{"post":"welcome-to-our-blog","post-title":"Welcome","name":"Test","comment":"Hello","ip":"192.0.2.1"}}}'
+```
+
 ## Files
 
 | File | Purpose |
@@ -108,10 +186,13 @@ The editor version is pinned in `admin/index.html`
 | `encounters_in_joy_intake-YYYY-MM.pdf` | Counseling intake PDF (download/print/bring). Exported from the ministry's Word master; the filename carries the revision. See [Revising the intake form](#revising-the-intake-form). |
 | `intake-source/*.docx` | The Word masters the intake PDFs are exported from. Kept in git so revisions are reproducible; stripped from the deploy by the build command, so they are not downloadable from the site. |
 | `admin/` | Blog editor (Decap CMS) and its `config.yml` |
+| `admin/comments.html` | Comment moderation page (delete, block). See [Comments](#comments). |
+| `netlify/functions/`, `netlify/lib/` | Server-side code for blog comments |
+| `package.json`, `package-lock.json` | The one package the comment functions use (`@netlify/blobs`) |
 | `blog/posts/*.md` | Blog post source files (the only blog files in git) |
 | `tools/build-blog.js`, `tools/blog-templates.js` | Blog build script and page templates |
 | `images/blog/` | Photos uploaded through the editor |
-| `netlify.toml` | Netlify build command + headers |
+| `netlify.toml` | Netlify build command, functions folder + headers |
 | `sitemap.xml` | Search engine sitemap (blog section is auto-generated) |
 | `robots.txt` | Crawler directives |
 | `Jeff.jpg`, `Stephanie.jpg` | Counselor headshots (also used as blog author photos) |

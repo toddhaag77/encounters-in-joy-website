@@ -18,6 +18,16 @@
 [build.environment]
   NODE_VERSION = "22"
 
+# Blog comments (see README "Comments"). Netlify finds these on its own;
+# the setting is spelled out so it's clear where the server-side code lives.
+#   submission-created.mjs  saves each comment from the form under a post
+#   comments.mjs            /api/comments: the comments shown on a post
+#   comments-admin.mjs      /api/comments/admin: delete/block, for /admin/comments.html
+# Their one package (@netlify/blobs, comment storage) is in package.json;
+# Netlify installs it before the build. The blog build itself needs no packages.
+[functions]
+  directory = "netlify/functions"
+
 # The CMS editor shell: don't cache it (so config changes apply right away)
 # and keep it out of search engines.
 [[headers]]

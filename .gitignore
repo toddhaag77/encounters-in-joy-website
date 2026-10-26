@@ -24,6 +24,13 @@ files.zip
 
 # Netlify CLI local state
 .netlify/
+deno.lock
+
+# Packages for the Netlify Functions (installed from package-lock.json)
+node_modules/
+
+# Local secrets, e.g. COMMENTS_ADMIN_PASSWORD for `netlify dev`
+.env
 
 # OS metadata
 .DS_Store

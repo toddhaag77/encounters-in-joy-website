@@ -1,0 +1,8 @@
+{
+  "name": "encounters-in-joy-website",
+  "private": true,
+  "description": "Only the blog-comment functions in netlify/functions/ use these packages. The blog build (tools/build-blog.js) needs no npm install.",
+  "dependencies": {
+    "@netlify/blobs": "11.1.6"
+  }
+}
