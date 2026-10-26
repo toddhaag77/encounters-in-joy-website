@@ -83,6 +83,9 @@ lives in `admin/config.yml`.
   are fine.
 - A post that can't be read (missing title/date, broken header) is skipped with a
   warning in the Netlify build log; it never breaks the deploy.
+- The build command deletes `blog/posts/` from the deploy after the pages are
+  generated, so the Markdown sources — drafts especially — can't be read at
+  `/blog/posts/<slug>.md`. Only the generated pages are public.
 
 ### Adding an author
 

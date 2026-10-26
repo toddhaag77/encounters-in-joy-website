@@ -11,8 +11,13 @@
 # the form off the ministry's domain, or have a search engine surface the .docx
 # instead of the PDF. Deleting it here only touches Netlify's build checkout,
 # never the repo.
+#
+# blog/posts/ is stripped the same way once the blog pages are built from it:
+# the Markdown sources (draft posts included) would otherwise be readable at
+# /blog/posts/<slug>.md before anyone has published them. The CMS reads posts
+# from GitHub, not from the live site, so it never needs them deployed.
 [build]
-  command = "node tools/build-blog.js && rm -rf intake-source"
+  command = "node tools/build-blog.js && rm -rf intake-source blog/posts"
   publish = "."
 
 [build.environment]
