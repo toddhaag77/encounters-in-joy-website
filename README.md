@@ -103,6 +103,8 @@ The editor version is pinned in `admin/index.html`
 | `services.html` | Programs and services |
 | `contact.html` | Contact page (address, phone, email, and the lead form) |
 | `grief.html`, `why-no-insurance.html`, `counseling-*-ga.html` | Service and city landing pages |
+| `holiday-grief.html` | Seasonal guide, "Getting through the holidays after a loss", with the next grief group dates and a print layout for churches and funeral homes. Linked from the homepage hero, the homepage and services group cards, and a band on `grief.html` — take those links down after January. |
+| `llms.txt` | Plain-text summary of the ministry (facts, fees, counselors, group schedule, key pages) for AI search tools such as ChatGPT. Keep it in step with the site when fees, people, or the group schedule change. |
 | `intake.html` | Intake-forms download page |
 | `donate.html` | Donation page |
 | `encounters_in_joy_intake-YYYY-MM.pdf` | Counseling intake PDF (download/print/bring). Exported from the ministry's Word master; the filename carries the revision. See [Revising the intake form](#revising-the-intake-form). |
@@ -211,6 +213,22 @@ less forever, which would make the alias impossible to re-point.
    curl -sI https://encountersinjoy.org/intake-form.pdf          # 302 to the new file
    curl -s https://encountersinjoy.org/encounters_in_joy_intake-YYYY-MM.pdf -o live.pdf
    ```
+
+## Grief group dates
+
+The Encounters in Grief group meets the second Sunday of every month at 3:30 PM.
+Its upcoming dates are written out by hand in three places, which must agree:
+
+- `grief.html` — the Event schema block in the `<head>` (one entry per date, so
+  the group can appear in Google's event listings) and the "Next dates" list in
+  the group card. The page shows only the next three; past dates hide themselves.
+- `holiday-grief.html` — the three dates in the `#group` section.
+
+The schema currently runs through **April 11, 2027**. Before that date passes, add
+the next few second Sundays to both lists on `grief.html`. Use `-05:00` for the
+time-zone offset from November to early March and `-04:00` while daylight saving
+time is on (the second Sunday in March is the day it starts, so that date is
+`-04:00`). If a month is cancelled, delete that date from both places.
 
 ## Deploys
 
