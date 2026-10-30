@@ -1,8 +1,13 @@
 {
   "name": "encounters-in-joy-website",
   "private": true,
-  "description": "Only the blog-comment functions in netlify/functions/ use these packages. The blog build (tools/build-blog.js) needs no npm install.",
+  "description": "Two packages: tailwindcss builds the stylesheet (assets/site.css) and @netlify/blobs is used by the blog-comment functions in netlify/functions/. The blog build itself (tools/build-blog.js) needs no packages.",
+  "scripts": {
+    "build": "node tools/build-blog.js && npm run build:css",
+    "build:css": "tailwindcss -c tailwind.config.js -i tools/tailwind.css -o assets/site.css --minify"
+  },
   "dependencies": {
-    "@netlify/blobs": "11.1.6"
+    "@netlify/blobs": "11.1.6",
+    "tailwindcss": "3.4.17"
   }
 }

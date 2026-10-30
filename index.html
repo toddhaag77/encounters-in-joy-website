@@ -33,7 +33,9 @@
   <meta property="og:url" content="https://encountersinjoy.org/">
   <meta property="og:title" content="Biblical Counseling in Statham, GA · Encounters in Joy">
   <meta property="og:description" content="Faith-grounded counseling for individuals, couples & families in Barrow County, GA. 35+ years experience. Sliding scale & scholarship available.">
-  <meta property="og:image" content="https://encountersinjoy.org/eij%20with%20words.png">
+  <meta property="og:image" content="https://encountersinjoy.org/images/og-encounters-in-joy.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Encounters in Joy — Christian counseling in Statham, GA">
   <meta property="og:locale" content="en_US">
   <meta property="og:site_name" content="Encounters in Joy">
@@ -42,7 +44,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Biblical Counseling in Statham, GA · Encounters in Joy">
   <meta name="twitter:description" content="Faith-grounded counseling for individuals, couples & families in Barrow County, GA. 35+ years experience. Sliding scale & scholarship available.">
-  <meta name="twitter:image" content="https://encountersinjoy.org/eij%20with%20words.png">
+  <meta name="twitter:image" content="https://encountersinjoy.org/images/og-encounters-in-joy.jpg">
 
   <!-- LocalBusiness Schema for SEO -->
   <script type="application/ld+json">
@@ -154,32 +156,14 @@
   }
   </script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            // Calibrated to Lovable: hsl(6, 70%, 45%) primary
-            crimson: { 50: '#fdf3f1', 100: '#fadcd5', 200: '#f1ad9f', 300: '#e57f6c', 400: '#d65543', 500: '#d63725', 600: '#c42a20', 700: '#a72017', 800: '#8f2e24', 900: '#65100b' },
-            // Calibrated to Lovable: hsl(45, 100%, 60%) accent
-            gold:    { 50: '#fff8e1', 100: '#ffeeba', 200: '#ffe085', 300: '#ffd052', 400: '#ffcc33', 500: '#f2cc5a', 600: '#d8a013', 700: '#b58015', 800: '#8a5a16', 900: '#623a14' },
-            // Calibrated to Lovable: hsl(28, 20-40%, 88-97%)
-            cream:   { 50: '#f9f7f6', 100: '#f4efe9', 200: '#efe5da', 300: '#e2ddd5', 400: '#d3c5b0', 500: '#b39c7d', 600: '#8e7558', 700: '#6e5841', 800: '#4f3f2e', 900: '#332820' },
-            // Warm browns for hero gradient and footer (derived from rgb(116,80,62))
-            brown:   { 50: '#f6f1ec', 100: '#e6d8c8', 200: '#cdb293', 300: '#b08c66', 400: '#8c6c4a', 500: '#74503e', 600: '#5e4030', 700: '#4a3225', 800: '#3a2820', 900: '#2a1d18' },
-          },
-          fontFamily: {
-            display: ['"Cormorant Garamond"', 'serif'],
-            body: ['"Source Sans 3"', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
+  <!-- Icons -->
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <!-- Styles: one compiled stylesheet (Tailwind + self-hosted fonts), see tailwind.config.js -->
+  <link rel="preload" href="/assets/fonts/source-sans-3-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/cormorant-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/site.css">
   <style>
     html { scroll-behavior: smooth; }
     body { font-family: 'Source Sans 3', sans-serif; }
@@ -239,7 +223,7 @@
   <nav id="nav" class="fixed top-0 w-full z-50 transition-all duration-300 bg-cream-50 border-b border-cream-200">
     <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
       <a href="#" class="flex items-center gap-3 font-display text-2xl font-semibold text-crimson-800 tracking-tight">
-        <img src="EIJ logo.png" alt="" class="h-9 w-auto">
+        <img src="/images/eij-logo.webp" alt="" width="240" height="180" class="h-9 w-auto">
         Encounters in Joy
       </a>
       <!-- Desktop links -->
@@ -327,7 +311,7 @@
           <div class="relative">
             <!-- Soft glow behind logo -->
             <div class="absolute inset-0 bg-gold-300/30 rounded-full blur-3xl scale-90"></div>
-            <img src="EIJ%20logo.png" alt="Encounters in Joy — apple with cross" fetchpriority="high" width="400" height="300" class="relative w-full max-w-[400px] drop-shadow-2xl">
+            <img src="/images/eij-logo-hero.webp" alt="Encounters in Joy — apple with cross" fetchpriority="high" width="800" height="600" class="relative w-full max-w-[400px] drop-shadow-2xl">
           </div>
           <p class="font-display italic text-cream-100 text-xl text-center max-w-sm leading-relaxed drop-shadow-sm">
             What began in the Garden ends at the Cross.
@@ -451,7 +435,7 @@
         <!-- Jeff -->
         <div class="fade-up">
           <div class="bg-gradient-to-br from-crimson-50 to-cream-50 rounded-2xl p-10 border border-crimson-100">
-            <img src="Jeff.jpg" alt="Reverend Jeff Langley" loading="lazy" decoding="async" width="480" height="360" class="w-24 h-24 rounded-full object-cover mb-6">
+            <img src="/images/jeff-langley.webp" alt="Reverend Jeff Langley" loading="lazy" decoding="async" width="384" height="288" class="w-24 h-24 rounded-full object-cover mb-6">
             <h3 class="font-display text-2xl font-semibold text-crimson-800 mb-1">Reverend Jeff Langley</h3>
             <p class="text-cream-600 font-medium text-sm mb-5">35 Years in Ministry</p>
             <ul class="space-y-2.5 text-stone-600 text-sm">
@@ -481,7 +465,7 @@
         <!-- Stephanie -->
         <div class="fade-up">
           <div class="bg-gradient-to-br from-cream-50 to-crimson-50 rounded-2xl p-10 border border-cream-100">
-            <img src="Stephanie.jpg" alt="Stephanie Langley" loading="lazy" decoding="async" width="256" height="320" class="w-24 h-24 rounded-full object-cover mb-6">
+            <img src="/images/stephanie-langley.webp" alt="Stephanie Langley" loading="lazy" decoding="async" width="256" height="320" class="w-24 h-24 rounded-full object-cover mb-6">
             <h3 class="font-display text-2xl font-semibold text-crimson-800 mb-1">Stephanie Langley</h3>
             <p class="text-cream-600 font-medium text-sm mb-5">Certified Christian Counselor</p>
             <ul class="space-y-2.5 text-stone-600 text-sm">
@@ -683,7 +667,7 @@
         <!-- Brand -->
         <div>
           <div class="flex items-center gap-3 mb-4">
-            <img src="WatercolorApple(4).png" alt="" loading="lazy" decoding="async" width="320" height="320" class="h-10 w-auto">
+            <img src="/images/eij-apple.webp" alt="" loading="lazy" decoding="async" width="200" height="200" class="h-10 w-auto">
             <p class="font-display text-xl font-semibold text-gold-300">Encounters in Joy, Inc.</p>
           </div>
           <p class="text-cream-300 text-sm leading-relaxed mb-3">A 501(c)(3) ministry providing professional, faith-grounded counseling for individuals, couples, and families across Barrow County and beyond. Sliding scale &amp; scholarships available.</p>
