@@ -1,8 +1,9 @@
 # Netlify settings for encountersinjoy.org
 #
-# The site is plain static HTML. The only build step turns blog posts
-# (blog/posts/*.md, written in the CMS at /admin/) into web pages.
-# See tools/build-blog.js.
+# The site is plain static HTML. The build (`npm run build`, see package.json)
+# does two things: turns blog posts (blog/posts/*.md, written in the CMS at
+# /admin/) into web pages (tools/build-blog.js), and compiles the one
+# stylesheet every page loads, assets/site.css (tailwind.config.js).
 
 # The site publishes the whole repo root, so anything committed here is
 # downloadable from encountersinjoy.org. intake-source/ holds the editable Word
@@ -12,7 +13,7 @@
 # instead of the PDF. Deleting it here only touches Netlify's build checkout,
 # never the repo.
 [build]
-  command = "node tools/build-blog.js && rm -rf intake-source"
+  command = "npm run build && rm -rf intake-source"
   publish = "."
 
 [build.environment]
@@ -27,6 +28,30 @@
 # Netlify installs it before the build. The blog build itself needs no packages.
 [functions]
   directory = "netlify/functions"
+
+# Canonical address. Netlify already sends http:// to https:// and the www
+# host to the bare domain; spelling the www rules out here makes a
+# http://www... request land on the canonical https:// bare-domain URL in one
+# hop instead of two. (Search engines follow short chains fine, but one hop is
+# cleaner and faster.)
+[[redirects]]
+  from = "https://www.encountersinjoy.org/*"
+  to = "https://encountersinjoy.org/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.encountersinjoy.org/*"
+  to = "https://encountersinjoy.org/:splat"
+  status = 301
+  force = true
+
+# The self-hosted font files never change (a new font would get a new file
+# name), so browsers can keep them for a year.
+[[headers]]
+  for = "/assets/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
 
 # The CMS editor shell: don't cache it (so config changes apply right away)
 # and keep it out of search engines.

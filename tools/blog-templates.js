@@ -13,26 +13,32 @@ const SITE = 'https://encountersinjoy.org';
 const BLOG_TITLE = 'Encounters in Joy Blog';
 const BLOG_DESCRIPTION =
   'Honest, faith-grounded reflections on grief, anxiety, marriage, and the ordinary hard days — written by the counselors at Encounters in Joy in Statham, GA.';
-const DEFAULT_IMAGE = SITE + '/eij%20with%20words.png';
+const DEFAULT_IMAGE = SITE + '/images/og-encounters-in-joy.jpg'; // 1200x630 social card
+const LOGO_IMAGE = SITE + '/eij%20with%20words.png'; // publisher logo in schema
 const DEFAULT_IMAGE_ALT = 'Encounters in Joy — Christian counseling in Statham, GA';
 
 // Counselors who write for the blog. The author name in a post is matched
 // loosely (case-insensitive, "Rev."/"Reverend" ignored) so a byline of
-// "Reverend Jeff Langley" or "Jeff Langley" both get the photo and role.
+// "Reverend Jeff Langley" or "Jeff Langley" both get the photo, role and bio.
+// The bio shows under every post and goes into the post's Person schema, so
+// keep it in step with the credentials on about.html#team.
 // To add a new author, add an entry here AND to the options list in
 // admin/config.yml.
+const TEAM_URL = SITE + '/about.html#team';
 const AUTHORS = [
   {
     match: ['jeff langley'],
-    photo: '/Jeff.jpg',
+    photo: '/images/jeff-langley.webp',
     photoAlt: 'Reverend Jeff Langley',
     role: 'Founder · 35 years in ministry',
+    bio: 'Reverend Jeff Langley founded Encounters in Joy after 35 years in pastoral ministry. He is board certified through the International Board of Christian Care, a Certified Trauma Informed Coach and Specialist, and holds a Master\'s in Human Services from Liberty University.',
   },
   {
     match: ['stephanie langley'],
-    photo: '/Stephanie.jpg',
+    photo: '/images/stephanie-langley.webp',
     photoAlt: 'Stephanie Langley',
     role: 'Certified Christian Counselor',
+    bio: 'Stephanie Langley is a Certified Christian Counselor with a Master\'s in Clinical Counseling from Brenau University. She counsels individuals, couples, and families alongside Jeff at the Statham office.',
   },
 ];
 
@@ -139,28 +145,14 @@ function head({ title, description, url, image, imageAlt, ogType, structuredData
 
   ${ld}
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            crimson: { 50: '#fdf3f1', 100: '#fadcd5', 200: '#f1ad9f', 300: '#e57f6c', 400: '#d65543', 500: '#d63725', 600: '#c42a20', 700: '#a72017', 800: '#8f2e24', 900: '#65100b' },
-            gold:    { 50: '#fff8e1', 100: '#ffeeba', 200: '#ffe085', 300: '#ffd052', 400: '#ffcc33', 500: '#f2cc5a', 600: '#d8a013', 700: '#b58015', 800: '#8a5a16', 900: '#623a14' },
-            cream:   { 50: '#f9f7f6', 100: '#f4efe9', 200: '#efe5da', 300: '#e2ddd5', 400: '#d3c5b0', 500: '#b39c7d', 600: '#8e7558', 700: '#6e5841', 800: '#4f3f2e', 900: '#332820' },
-            brown:   { 50: '#f6f1ec', 100: '#e6d8c8', 200: '#cdb293', 300: '#b08c66', 400: '#8c6c4a', 500: '#74503e', 600: '#5e4030', 700: '#4a3225', 800: '#3a2820', 900: '#2a1d18' },
-          },
-          fontFamily: {
-            display: ['"Cormorant Garamond"', 'serif'],
-            body: ['"Source Sans 3"', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
+  <!-- Icons -->
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <!-- Styles: one compiled stylesheet (Tailwind + self-hosted fonts), see tailwind.config.js -->
+  <link rel="preload" href="/assets/fonts/source-sans-3-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/cormorant-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/site.css">
   <style>
     body { font-family: 'Source Sans 3', sans-serif; }
 
@@ -211,7 +203,7 @@ function nav() {
   <nav class="bg-cream-50 border-b border-cream-200">
     <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
       <a href="/" class="flex items-center gap-3 font-display text-xl font-semibold text-crimson-800 tracking-tight">
-        <img src="/EIJ%20logo.png" alt="" class="h-8 w-auto">
+        <img src="/images/eij-logo.webp" alt="" width="240" height="180" class="h-8 w-auto">
         Encounters in Joy
       </a>
       <!-- Desktop links -->
@@ -260,6 +252,28 @@ function nav() {
   </nav>`;
 }
 
+/**
+ * Visible breadcrumb trail, same markup as the hand-written pages. The last
+ * item is the current page. Mirrors the BreadcrumbList schema in <head>.
+ */
+function breadcrumb(items) {
+  const li = items
+    .map((it, i) =>
+      i < items.length - 1
+        ? `<li><a href="${esc(it[1])}" class="hover:text-crimson-700">${esc(it[0])}</a></li>
+      <li aria-hidden="true" class="text-stone-400">&rsaquo;</li>`
+        : `<li><span aria-current="page" class="text-stone-700 font-medium">${esc(it[0])}</span></li>`
+    )
+    .join('\n      ');
+  return `
+  <!-- Breadcrumb (mirrors the BreadcrumbList schema in <head>) -->
+  <nav aria-label="Breadcrumb" class="bg-cream-50 border-b border-cream-200">
+    <ol class="max-w-6xl mx-auto px-6 py-2.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-stone-500">
+      ${li}
+    </ol>
+  </nav>`;
+}
+
 function ctaSection() {
   return `
   <!-- Gentle call to action -->
@@ -297,7 +311,7 @@ function footer() {
       <div class="grid md:grid-cols-3 gap-10 mb-10">
         <div>
           <div class="flex items-center gap-3 mb-4">
-            <img src="/WatercolorApple(4).png" alt="" loading="lazy" decoding="async" width="320" height="320" class="h-10 w-auto">
+            <img src="/images/eij-apple.webp" alt="" loading="lazy" decoding="async" width="200" height="200" class="h-10 w-auto">
             <p class="font-display text-xl font-semibold text-gold-300">Encounters in Joy, Inc.</p>
           </div>
           <p class="text-cream-300 text-sm leading-relaxed mb-3">A 501(c)(3) ministry providing professional, faith-grounded counseling for individuals, couples, and families across Barrow County and beyond. Sliding scale &amp; scholarships available.</p>
@@ -643,12 +657,23 @@ function postPage(p, others, img) {
       datePublished: p.dateIso,
       dateModified: p.dateIso,
       wordCount: p.wordCount,
-      author: { '@type': 'Person', name: p.author, url: SITE + '/#team' },
+      author: author
+        ? {
+            '@type': 'Person',
+            name: p.author,
+            url: TEAM_URL,
+            image: SITE + author.photo,
+            jobTitle: author.role,
+            description: author.bio,
+            worksFor: { '@type': 'Organization', '@id': SITE + '/#organization', name: 'Encounters in Joy, Inc.' },
+          }
+        : { '@type': 'Person', name: p.author, url: TEAM_URL },
       publisher: {
         '@type': 'Organization',
+        '@id': SITE + '/#organization',
         name: 'Encounters in Joy, Inc.',
         url: SITE + '/',
-        logo: { '@type': 'ImageObject', url: DEFAULT_IMAGE },
+        logo: { '@type': 'ImageObject', url: LOGO_IMAGE },
       },
       mainEntityOfPage: { '@type': 'WebPage', '@id': p.absoluteUrl },
     },
@@ -681,7 +706,8 @@ function postPage(p, others, img) {
           <p class="text-xs uppercase tracking-widest text-crimson-600 font-semibold mb-1">About the author</p>
           <p class="font-display text-xl font-semibold text-crimson-900">${esc(p.author)}</p>
           ${author ? `<p class="text-stone-600 text-sm">${esc(author.role)}</p>` : ''}
-          <a href="/#team" class="inline-flex items-center gap-1.5 text-crimson-700 text-sm font-semibold hover:text-crimson-900 mt-2">Meet our counselors ${ARROW_ICON}</a>
+          ${author ? `<p class="text-stone-600 text-sm leading-relaxed mt-3">${esc(author.bio)}</p>` : ''}
+          <a href="/about.html#team" class="inline-flex items-center gap-1.5 text-crimson-700 text-sm font-semibold hover:text-crimson-900 mt-3">Meet our counselors ${ARROW_ICON}</a>
         </div>
       </div>`;
 
@@ -706,7 +732,7 @@ function postPage(p, others, img) {
 
   return `${head({
     title: `${p.title} | ${BLOG_TITLE}`,
-    description: p.excerpt,
+    description: p.metaDescription,
     url: p.absoluteUrl,
     image: absoluteImage,
     imageAlt: p.image ? p.title : DEFAULT_IMAGE_ALT,
@@ -715,6 +741,7 @@ function postPage(p, others, img) {
   })}
 <body class="bg-cream-50 text-stone-800">
 ${nav()}
+${breadcrumb([['Home', '/'], ['Blog', '/blog/'], [p.title, p.url]])}
 
   <article>
     <!-- Title -->
@@ -804,6 +831,7 @@ function indexPage(posts, img) {
   })}
 <body class="bg-cream-50 text-stone-800">
 ${nav()}
+${breadcrumb([['Home', '/'], ['Blog', '/blog/']])}
 
   <!-- Hero -->
   <section class="relative overflow-hidden">
