@@ -2,7 +2,7 @@
 title: Grief when one loses a pet
 date: 2026-09-27
 author: Rev. Jeff Langley
-summary: "Grief happens when we loose a pet and many times takes a real toll on
+summary: "Grief happens when we lose a pet and many times takes a real toll on
   the individual and families. "
 draft: false
 ---

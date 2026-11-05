@@ -213,6 +213,7 @@ function readPosts() {
       dateRfc: rfcDate(dateIso),
       summary,
       excerpt: summary || truncate(plain, 160),
+      metaDescription: truncate(summary || plain, 158), // <meta name="description">: Google shows ~155-160 chars
       image: d.image ? String(d.image).trim() : '',
       html,
       wordCount,

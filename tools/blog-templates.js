@@ -13,26 +13,32 @@ const SITE = 'https://encountersinjoy.org';
 const BLOG_TITLE = 'Encounters in Joy Blog';
 const BLOG_DESCRIPTION =
   'Honest, faith-grounded reflections on grief, anxiety, marriage, and the ordinary hard days — written by the counselors at Encounters in Joy in Statham, GA.';
-const DEFAULT_IMAGE = SITE + '/eij%20with%20words.png';
+const DEFAULT_IMAGE = SITE + '/images/og-encounters-in-joy.jpg'; // 1200x630 social card
+const LOGO_IMAGE = SITE + '/eij%20with%20words.png'; // publisher logo in schema
 const DEFAULT_IMAGE_ALT = 'Encounters in Joy — Christian counseling in Statham, GA';
 
 // Counselors who write for the blog. The author name in a post is matched
 // loosely (case-insensitive, "Rev."/"Reverend" ignored) so a byline of
-// "Reverend Jeff Langley" or "Jeff Langley" both get the photo and role.
+// "Reverend Jeff Langley" or "Jeff Langley" both get the photo, role and bio.
+// The bio shows under every post and goes into the post's Person schema, so
+// keep it in step with the credentials on about.html#team.
 // To add a new author, add an entry here AND to the options list in
 // admin/config.yml.
+const TEAM_URL = SITE + '/about.html#team';
 const AUTHORS = [
   {
     match: ['jeff langley'],
-    photo: '/Jeff.jpg',
+    photo: '/images/jeff-langley.webp',
     photoAlt: 'Reverend Jeff Langley',
     role: 'Founder · 35 years in ministry',
+    bio: 'Reverend Jeff Langley founded Encounters in Joy after 35 years in pastoral ministry. He is board certified through the International Board of Christian Care, a Certified Trauma Informed Coach and Specialist, and holds a Master\'s in Human Services from Liberty University.',
   },
   {
     match: ['stephanie langley'],
-    photo: '/Stephanie.jpg',
+    photo: '/images/stephanie-langley.webp',
     photoAlt: 'Stephanie Langley',
     role: 'Certified Christian Counselor',
+    bio: 'Stephanie Langley is a Certified Christian Counselor with a Master\'s in Clinical Counseling from Brenau University. She counsels individuals, couples, and families alongside Jeff at the Statham office.',
   },
 ];
 
@@ -72,6 +78,22 @@ const ARROW_ICON =
 
 const CHAT_ICON =
   '<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"/></svg>';
+
+// Share buttons
+const FACEBOOK_ICON =
+  '<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12z"/></svg>';
+
+const X_ICON =
+  '<svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>';
+
+const MAIL_ICON =
+  '<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>';
+
+const LINK_ICON =
+  '<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg>';
+
+const SHARE_ICON =
+  '<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 00-2.25 2.25v9a2.25 2.25 0 002.25 2.25h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25H15m0-3l-3-3m0 0l-3 3m3-3V15"/></svg>';
 
 // ---------------------------------------------------------------------------
 // Shared page chrome
@@ -123,28 +145,14 @@ function head({ title, description, url, image, imageAlt, ogType, structuredData
 
   ${ld}
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            crimson: { 50: '#fdf3f1', 100: '#fadcd5', 200: '#f1ad9f', 300: '#e57f6c', 400: '#d65543', 500: '#d63725', 600: '#c42a20', 700: '#a72017', 800: '#8f2e24', 900: '#65100b' },
-            gold:    { 50: '#fff8e1', 100: '#ffeeba', 200: '#ffe085', 300: '#ffd052', 400: '#ffcc33', 500: '#f2cc5a', 600: '#d8a013', 700: '#b58015', 800: '#8a5a16', 900: '#623a14' },
-            cream:   { 50: '#f9f7f6', 100: '#f4efe9', 200: '#efe5da', 300: '#e2ddd5', 400: '#d3c5b0', 500: '#b39c7d', 600: '#8e7558', 700: '#6e5841', 800: '#4f3f2e', 900: '#332820' },
-            brown:   { 50: '#f6f1ec', 100: '#e6d8c8', 200: '#cdb293', 300: '#b08c66', 400: '#8c6c4a', 500: '#74503e', 600: '#5e4030', 700: '#4a3225', 800: '#3a2820', 900: '#2a1d18' },
-          },
-          fontFamily: {
-            display: ['"Cormorant Garamond"', 'serif'],
-            body: ['"Source Sans 3"', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
+  <!-- Icons -->
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <!-- Styles: one compiled stylesheet (Tailwind + self-hosted fonts), see tailwind.config.js -->
+  <link rel="preload" href="/assets/fonts/source-sans-3-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/cormorant-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/site.css">
   <style>
     body { font-family: 'Source Sans 3', sans-serif; }
 
@@ -195,7 +203,7 @@ function nav() {
   <nav class="bg-cream-50 border-b border-cream-200">
     <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
       <a href="/" class="flex items-center gap-3 font-display text-xl font-semibold text-crimson-800 tracking-tight">
-        <img src="/EIJ%20logo.png" alt="" class="h-8 w-auto">
+        <img src="/images/eij-logo.webp" alt="" width="240" height="180" class="h-8 w-auto">
         Encounters in Joy
       </a>
       <!-- Desktop links -->
@@ -244,6 +252,28 @@ function nav() {
   </nav>`;
 }
 
+/**
+ * Visible breadcrumb trail, same markup as the hand-written pages. The last
+ * item is the current page. Mirrors the BreadcrumbList schema in <head>.
+ */
+function breadcrumb(items) {
+  const li = items
+    .map((it, i) =>
+      i < items.length - 1
+        ? `<li><a href="${esc(it[1])}" class="hover:text-crimson-700">${esc(it[0])}</a></li>
+      <li aria-hidden="true" class="text-stone-400">&rsaquo;</li>`
+        : `<li><span aria-current="page" class="text-stone-700 font-medium">${esc(it[0])}</span></li>`
+    )
+    .join('\n      ');
+  return `
+  <!-- Breadcrumb (mirrors the BreadcrumbList schema in <head>) -->
+  <nav aria-label="Breadcrumb" class="bg-cream-50 border-b border-cream-200">
+    <ol class="max-w-6xl mx-auto px-6 py-2.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-stone-500">
+      ${li}
+    </ol>
+  </nav>`;
+}
+
 function ctaSection() {
   return `
   <!-- Gentle call to action -->
@@ -281,7 +311,7 @@ function footer() {
       <div class="grid md:grid-cols-3 gap-10 mb-10">
         <div>
           <div class="flex items-center gap-3 mb-4">
-            <img src="/WatercolorApple(4).png" alt="" loading="lazy" decoding="async" width="320" height="320" class="h-10 w-auto">
+            <img src="/images/eij-apple.webp" alt="" loading="lazy" decoding="async" width="200" height="200" class="h-10 w-auto">
             <p class="font-display text-xl font-semibold text-gold-300">Encounters in Joy, Inc.</p>
           </div>
           <p class="text-cream-300 text-sm leading-relaxed mb-3">A 501(c)(3) ministry providing professional, faith-grounded counseling for individuals, couples, and families across Barrow County and beyond. Sliding scale &amp; scholarships available.</p>
@@ -376,11 +406,209 @@ function trackingScript() {
       document.querySelectorAll('a[href^="tel:"]').forEach(function (a) {
         a.addEventListener('click', function () { track('phone_click', { event_category: 'engagement', event_label: a.getAttribute('href') }); });
       });
-      document.querySelectorAll('a[href^="mailto:"]').forEach(function (a) {
+      // (Share-by-email links are counted as shares, not as someone emailing us.)
+      document.querySelectorAll('a[href^="mailto:"]:not([data-share])').forEach(function (a) {
         a.addEventListener('click', function () { track('email_click', { event_category: 'engagement', event_label: a.getAttribute('href') }); });
       });
       document.querySelectorAll('a[href^="sms:"]').forEach(function (a) {
         a.addEventListener('click', function () { track('text_click', { event_category: 'engagement', event_label: a.getAttribute('href') }); });
+      });
+    })();
+  </script>`;
+}
+
+// ---------------------------------------------------------------------------
+// Share buttons and comments (post pages only)
+// ---------------------------------------------------------------------------
+
+/**
+ * Plain share links — no Facebook/X scripts, so nothing tracks readers. The
+ * "More" button opens the phone's own share sheet (Messages, WhatsApp, …) and
+ * only appears where the browser supports it.
+ */
+function shareBar(p) {
+  const url = encodeURIComponent(p.absoluteUrl);
+  const title = encodeURIComponent(p.title);
+  const emailBody = encodeURIComponent(`${p.excerpt}\n\n${p.absoluteUrl}`);
+  const btn =
+    'inline-flex items-center gap-2 rounded-full border border-cream-300 bg-white px-4 py-2 text-sm font-semibold text-stone-700 hover:border-crimson-300 hover:text-crimson-700 transition-colors';
+  return `
+      <!-- Share -->
+      <div id="shareBar" class="mt-12 flex flex-wrap items-center gap-3" data-url="${esc(p.absoluteUrl)}" data-title="${esc(p.title)}" data-text="${esc(p.excerpt)}">
+        <p class="w-full sm:w-auto sm:mr-1 text-xs uppercase tracking-widest text-crimson-600 font-semibold">Share this post</p>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" rel="noopener" data-share="facebook" class="${btn}">${FACEBOOK_ICON} Facebook</a>
+        <a href="https://x.com/intent/tweet?url=${url}&amp;text=${title}" target="_blank" rel="noopener" data-share="x" class="${btn}">${X_ICON} X</a>
+        <a href="mailto:?subject=${title}&amp;body=${emailBody}" data-share="email" class="${btn}">${MAIL_ICON} Email</a>
+        <button type="button" data-share="copy" class="${btn}">${LINK_ICON} <span>Copy link</span></button>
+        <button type="button" data-share="native" class="${btn}" style="display:none">${SHARE_ICON} More</button>
+      </div>`;
+}
+
+/**
+ * Comments go live as soon as they're posted. The form is a Netlify Form
+ * ("blog-comment"), so Netlify filters spam and emails a notification like it
+ * does for the lead form; netlify/functions/submission-created.mjs then saves
+ * the comment and /api/comments serves it back to this page. Moderators
+ * delete comments and block people at /admin/comments.html.
+ */
+function commentsSection(p) {
+  const field =
+    'w-full rounded-xl border border-cream-300 bg-white px-4 py-3 text-stone-800 placeholder-stone-400 focus:border-crimson-400 focus:outline-none focus:ring-2 focus:ring-crimson-100';
+  const label = 'block text-sm font-semibold text-stone-700 mb-1.5';
+  return `
+      <!-- Comments -->
+      <section id="comments" class="mt-14 pt-10 border-t border-cream-200 scroll-mt-6" aria-labelledby="commentsHeading">
+        <h2 id="commentsHeading" class="font-display text-3xl font-semibold text-crimson-900 mb-6">Comments <span id="commentCount" class="text-stone-400"></span></h2>
+        <ol id="commentList" class="space-y-7"></ol>
+        <p id="commentsEmpty" class="text-stone-500" hidden>No comments yet. You're welcome to share the first one.</p>
+        <p id="commentsError" class="text-stone-500" hidden>Comments couldn't be loaded just now. Please try again in a little while.</p>
+
+        <form id="commentForm" name="blog-comment" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="${esc(p.url)}?comment=posted#comments" class="mt-10 bg-cream-100/60 rounded-2xl border border-cream-200 p-6 md:p-8">
+          <input type="hidden" name="form-name" value="blog-comment">
+          <input type="hidden" name="post" value="${esc(p.slug)}">
+          <input type="hidden" name="post-title" value="${esc(p.title)}">
+          <p hidden><label>Leave this empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+          <h3 class="font-display text-2xl font-semibold text-crimson-900 mb-2">Leave a comment</h3>
+          <p class="text-sm text-stone-600 leading-relaxed mb-6">Comments are public, so please don't share anything you'd want kept private. To talk with someone privately, <a href="/contact.html" class="text-crimson-700 font-semibold hover:underline">reach out to us directly</a>. In a crisis, call or text <a href="tel:988" class="text-crimson-700 font-semibold hover:underline">988</a>.</p>
+          <div class="grid sm:grid-cols-2 gap-4 mb-4">
+            <label class="block">
+              <span class="${label}">Name</span>
+              <input type="text" name="name" required maxlength="60" autocomplete="given-name" placeholder="First name is fine" class="${field}">
+            </label>
+            <label class="block">
+              <span class="${label}">Email <span class="font-normal text-stone-500">(optional, never shown)</span></span>
+              <input type="email" name="email" maxlength="120" autocomplete="email" placeholder="Only if you'd like a private reply" class="${field}">
+            </label>
+          </div>
+          <label class="block mb-5">
+            <span class="${label}">Comment</span>
+            <textarea name="comment" required maxlength="3000" rows="5" class="${field}"></textarea>
+          </label>
+          <div class="flex flex-wrap items-center gap-4">
+            <button type="submit" class="bg-gold-400 text-brown-900 font-semibold px-6 py-3 rounded-full hover:bg-gold-300 transition-colors disabled:opacity-60">Post comment</button>
+            <p id="commentStatus" class="text-sm text-stone-600" role="status"></p>
+          </div>
+        </form>
+      </section>`;
+}
+
+function postScript(p) {
+  return `
+  <script>
+    // Share buttons + comments
+    (function() {
+      var SLUG = ${JSON.stringify(p.slug)};
+      function track(name, params) {
+        if (typeof gtag === 'function') gtag('event', name, params || {});
+        if (typeof clarity === 'function') clarity('event', name);
+      }
+
+      // --- Share ---
+      var bar = document.getElementById('shareBar');
+      var nativeBtn = bar.querySelector('[data-share="native"]');
+      var copyBtn = bar.querySelector('[data-share="copy"]');
+      if (navigator.share) nativeBtn.style.display = '';
+      bar.querySelectorAll('[data-share]').forEach(function (el) {
+        el.addEventListener('click', function () {
+          track('share', { method: el.getAttribute('data-share'), content_type: 'blog_post', item_id: SLUG });
+        });
+      });
+      nativeBtn.addEventListener('click', function () {
+        navigator.share({ title: bar.dataset.title, text: bar.dataset.text, url: bar.dataset.url }).catch(function () {});
+      });
+      copyBtn.addEventListener('click', function () {
+        var label = copyBtn.querySelector('span');
+        function copied() {
+          label.textContent = 'Link copied';
+          setTimeout(function () { label.textContent = 'Copy link'; }, 2500);
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(bar.dataset.url).then(copied, function () { window.prompt('Copy this link:', bar.dataset.url); });
+        } else {
+          window.prompt('Copy this link:', bar.dataset.url);
+        }
+      });
+
+      // --- Comments ---
+      var list = document.getElementById('commentList');
+      var count = document.getElementById('commentCount');
+      var empty = document.getElementById('commentsEmpty');
+      var form = document.getElementById('commentForm');
+      var status = document.getElementById('commentStatus');
+      var shown = 0;
+
+      function formatDate(iso) {
+        var d = new Date(iso);
+        return isNaN(d) ? '' : d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+      }
+      // Built with textContent only, so nothing a commenter types can turn into HTML.
+      function addComment(c, justPosted) {
+        var li = document.createElement('li');
+        li.className = 'flex gap-4';
+        var initial = document.createElement('div');
+        initial.className = 'w-10 h-10 shrink-0 rounded-full bg-gold-100 text-brown-800 font-display text-xl font-semibold flex items-center justify-center';
+        initial.setAttribute('aria-hidden', 'true');
+        initial.textContent = (c.name.trim().charAt(0) || '?').toUpperCase();
+        var body = document.createElement('div');
+        body.className = 'min-w-0 flex-1';
+        var meta = document.createElement('p');
+        meta.className = 'text-sm mb-1';
+        var who = document.createElement('span');
+        who.className = 'font-semibold text-stone-800';
+        who.textContent = c.name;
+        var when = document.createElement('time');
+        when.className = 'text-stone-500';
+        when.dateTime = c.createdAt;
+        when.textContent = ' \\u00b7 ' + (justPosted ? 'just now' : formatDate(c.createdAt));
+        meta.appendChild(who);
+        meta.appendChild(when);
+        var text = document.createElement('p');
+        text.className = 'text-stone-700 leading-relaxed whitespace-pre-line break-words';
+        text.textContent = c.comment;
+        body.appendChild(meta);
+        body.appendChild(text);
+        li.appendChild(initial);
+        li.appendChild(body);
+        list.appendChild(li);
+        shown++;
+        count.textContent = '(' + shown + ')';
+        empty.hidden = true;
+      }
+
+      fetch('/api/comments?post=' + encodeURIComponent(SLUG))
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(function (data) {
+          data.comments.forEach(function (c) { addComment(c, false); });
+          if (!shown) empty.hidden = false;
+        })
+        .catch(function () { document.getElementById('commentsError').hidden = false; });
+
+      if (/[?&]comment=posted\\b/.test(location.search)) {
+        status.textContent = 'Thank you \\u2014 your comment is posted. It can take a moment to appear.';
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var button = form.querySelector('button[type="submit"]');
+        var data = new FormData(form);
+        button.disabled = true;
+        status.textContent = 'Posting\\u2026';
+        fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(data).toString()
+        })
+          .then(function (r) {
+            if (!r.ok) throw new Error(r.status);
+            addComment({ name: data.get('name'), comment: data.get('comment'), createdAt: new Date().toISOString() }, true);
+            form.elements.comment.value = '';
+            status.textContent = 'Thank you \\u2014 your comment is posted.';
+            track('blog_comment', { item_id: SLUG });
+          })
+          .catch(function () {
+            status.textContent = "Sorry \\u2014 your comment didn't go through. Please try again.";
+          })
+          .then(function () { button.disabled = false; });
       });
     })();
   </script>`;
@@ -429,12 +657,23 @@ function postPage(p, others, img) {
       datePublished: p.dateIso,
       dateModified: p.dateIso,
       wordCount: p.wordCount,
-      author: { '@type': 'Person', name: p.author, url: SITE + '/#team' },
+      author: author
+        ? {
+            '@type': 'Person',
+            name: p.author,
+            url: TEAM_URL,
+            image: SITE + author.photo,
+            jobTitle: author.role,
+            description: author.bio,
+            worksFor: { '@type': 'Organization', '@id': SITE + '/#organization', name: 'Encounters in Joy, Inc.' },
+          }
+        : { '@type': 'Person', name: p.author, url: TEAM_URL },
       publisher: {
         '@type': 'Organization',
+        '@id': SITE + '/#organization',
         name: 'Encounters in Joy, Inc.',
         url: SITE + '/',
-        logo: { '@type': 'ImageObject', url: DEFAULT_IMAGE },
+        logo: { '@type': 'ImageObject', url: LOGO_IMAGE },
       },
       mainEntityOfPage: { '@type': 'WebPage', '@id': p.absoluteUrl },
     },
@@ -467,7 +706,8 @@ function postPage(p, others, img) {
           <p class="text-xs uppercase tracking-widest text-crimson-600 font-semibold mb-1">About the author</p>
           <p class="font-display text-xl font-semibold text-crimson-900">${esc(p.author)}</p>
           ${author ? `<p class="text-stone-600 text-sm">${esc(author.role)}</p>` : ''}
-          <a href="/#team" class="inline-flex items-center gap-1.5 text-crimson-700 text-sm font-semibold hover:text-crimson-900 mt-2">Meet our counselors ${ARROW_ICON}</a>
+          ${author ? `<p class="text-stone-600 text-sm leading-relaxed mt-3">${esc(author.bio)}</p>` : ''}
+          <a href="/about.html#team" class="inline-flex items-center gap-1.5 text-crimson-700 text-sm font-semibold hover:text-crimson-900 mt-3">Meet our counselors ${ARROW_ICON}</a>
         </div>
       </div>`;
 
@@ -492,7 +732,7 @@ function postPage(p, others, img) {
 
   return `${head({
     title: `${p.title} | ${BLOG_TITLE}`,
-    description: p.excerpt,
+    description: p.metaDescription,
     url: p.absoluteUrl,
     image: absoluteImage,
     imageAlt: p.image ? p.title : DEFAULT_IMAGE_ALT,
@@ -501,6 +741,7 @@ function postPage(p, others, img) {
   })}
 <body class="bg-cream-50 text-stone-800">
 ${nav()}
+${breadcrumb([['Home', '/'], ['Blog', '/blog/'], [p.title, p.url]])}
 
   <article>
     <!-- Title -->
@@ -524,7 +765,9 @@ ${nav()}
       <div class="post-body">
 ${p.html}
       </div>
+      ${shareBar(p)}
       ${authorCard}
+      ${commentsSection(p)}
     </div>
   </article>
 ${more}
@@ -534,6 +777,7 @@ ${footer()}
 ${mobileBar()}
 ${menuScript()}
 ${trackingScript()}
+${postScript(p)}
 </body>
 </html>
 `;
@@ -587,6 +831,7 @@ function indexPage(posts, img) {
   })}
 <body class="bg-cream-50 text-stone-800">
 ${nav()}
+${breadcrumb([['Home', '/'], ['Blog', '/blog/']])}
 
   <!-- Hero -->
   <section class="relative overflow-hidden">

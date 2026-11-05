@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Blog Comments · Encounters in Joy</title>
+  <link rel="icon" href="/EIJ%20logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Same palette as the rest of the site (see tools/blog-templates.js).
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            crimson: { 50: '#fdf3f1', 100: '#fadcd5', 200: '#f1ad9f', 300: '#e57f6c', 400: '#d65543', 500: '#d63725', 600: '#c42a20', 700: '#a72017', 800: '#8f2e24', 900: '#65100b' },
+            gold:    { 50: '#fff8e1', 100: '#ffeeba', 200: '#ffe085', 300: '#ffd052', 400: '#ffcc33', 500: '#f2cc5a', 600: '#d8a013', 700: '#b58015', 800: '#8a5a16', 900: '#623a14' },
+            cream:   { 50: '#f9f7f6', 100: '#f4efe9', 200: '#efe5da', 300: '#e2ddd5', 400: '#d3c5b0', 500: '#b39c7d', 600: '#8e7558', 700: '#6e5841', 800: '#4f3f2e', 900: '#332820' },
+            brown:   { 50: '#f6f1ec', 100: '#e6d8c8', 200: '#cdb293', 300: '#b08c66', 400: '#8c6c4a', 500: '#74503e', 600: '#5e4030', 700: '#4a3225', 800: '#3a2820', 900: '#2a1d18' },
+          },
+          fontFamily: {
+            display: ['"Cormorant Garamond"', 'serif'],
+            body: ['"Source Sans 3"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>body { font-family: 'Source Sans 3', sans-serif; }</style>
+</head>
+<body class="bg-cream-50 text-stone-800 min-h-screen">
+  <!--
+    Moderation page for blog comments: https://encountersinjoy.org/admin/comments.html
+    Comments go live as soon as they're posted; this is where they get deleted
+    and where people get blocked. It talks to netlify/functions/comments-admin.mjs
+    and needs the password set in Netlify as COMMENTS_ADMIN_PASSWORD (see README).
+  -->
+  <header class="bg-white border-b border-cream-200">
+    <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+      <a href="/" class="flex items-center gap-3 font-display text-xl font-semibold text-crimson-800">
+        <img src="/EIJ%20logo.png" alt="" class="h-8 w-auto">
+        Blog comments
+      </a>
+      <nav class="flex items-center gap-5 text-sm font-medium text-stone-600">
+        <a href="/blog/" class="hover:text-crimson-700">Blog</a>
+        <a href="/admin/" class="hover:text-crimson-700">Blog editor</a>
+        <button type="button" id="signOut" class="hover:text-crimson-700" hidden>Sign out</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-6 py-10">
+    <p id="notice" class="mb-6 rounded-xl border border-gold-200 bg-gold-50 px-4 py-3 text-sm text-brown-800" role="status" hidden></p>
+
+    <!-- Sign in -->
+    <form id="signIn" class="max-w-sm mx-auto bg-white rounded-2xl border border-cream-200 p-8" hidden>
+      <h1 class="font-display text-3xl font-semibold text-crimson-900 mb-2">Sign in</h1>
+      <p class="text-sm text-stone-600 mb-6">Enter the comments password to delete comments or block someone.</p>
+      <!-- A fixed username helps the browser offer to save the password. -->
+      <input type="text" name="username" value="blog-comments" autocomplete="username" hidden>
+      <label class="block mb-5">
+        <span class="block text-sm font-semibold text-stone-700 mb-1.5">Password</span>
+        <input type="password" id="password" required autocomplete="current-password" class="w-full rounded-xl border border-cream-300 bg-white px-4 py-3 focus:border-crimson-400 focus:outline-none focus:ring-2 focus:ring-crimson-100">
+      </label>
+      <button type="submit" class="w-full bg-gold-400 text-brown-900 font-semibold px-6 py-3 rounded-full hover:bg-gold-300 transition-colors disabled:opacity-60">Sign in</button>
+      <p id="signInError" class="mt-4 text-sm text-crimson-700" role="alert"></p>
+    </form>
+
+    <!-- Comments + block list -->
+    <div id="dashboard" hidden>
+      <div class="flex flex-wrap items-end justify-between gap-4 mb-2">
+        <h1 class="font-display text-4xl font-semibold text-crimson-900">Comments</h1>
+        <button type="button" id="refresh" class="text-sm font-semibold text-crimson-700 hover:text-crimson-900">Refresh</button>
+      </div>
+      <p class="text-stone-600 mb-8 max-w-2xl">Comments appear on the blog as soon as they're posted, and Netlify emails you about each one. Delete anything that shouldn't be public. Block someone to delete their comment and keep their future comments off the site.</p>
+
+      <ol id="comments" class="space-y-4"></ol>
+      <p id="noComments" class="text-stone-500 bg-white rounded-2xl border border-cream-200 px-6 py-8 text-center" hidden>No comments yet.</p>
+
+      <h2 class="font-display text-2xl font-semibold text-crimson-900 mt-14 mb-2">Blocked</h2>
+      <p class="text-sm text-stone-600 mb-4">Comments from these people are quietly kept off the site. Netlify still emails you when they try.</p>
+      <ol id="blocks" class="space-y-3"></ol>
+      <p id="noBlocks" class="text-sm text-stone-500" hidden>Nobody is blocked.</p>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var API = '/api/comments/admin';
+      var KEY = 'eij-comments-password';
+      var password = '';
+      try { password = localStorage.getItem(KEY) || ''; } catch (e) {}
+
+      var $ = function (id) { return document.getElementById(id); };
+      var signIn = $('signIn'), dashboard = $('dashboard'), notice = $('notice');
+
+      function show(message) {
+        notice.textContent = message;
+        notice.hidden = !message;
+      }
+
+      function api(method, body) {
+        return fetch(API, {
+          method: method,
+          headers: { 'Authorization': 'Bearer ' + password, 'Content-Type': 'application/json' },
+          body: body ? JSON.stringify(body) : undefined
+        }).then(function (r) {
+          return r.json().catch(function () { return {}; }).then(function (data) {
+            if (r.ok) return data;
+            var err = new Error(data.error || 'http-' + r.status);
+            err.status = r.status;
+            throw err;
+          });
+        });
+      }
+
+      function explain(err) {
+        if (err.status === 401) {
+          forget();
+          showSignIn('That password didn’t work.');
+          return;
+        }
+        if (err.message === 'not-configured') {
+          show('Comment moderation isn’t switched on yet. Add the COMMENTS_ADMIN_PASSWORD setting in Netlify and redeploy (see the "Blog comments" section of README.md).');
+          return;
+        }
+        show('Something went wrong talking to the comments service (' + err.message + '). Please try again in a minute.');
+      }
+
+      function forget() {
+        password = '';
+        try { localStorage.removeItem(KEY); } catch (e) {}
+      }
+
+      function showSignIn(error) {
+        dashboard.hidden = true;
+        $('signOut').hidden = true;
+        signIn.hidden = false;
+        $('signInError').textContent = error || '';
+        $('password').focus();
+      }
+
+      function when(iso) {
+        var d = new Date(iso);
+        return isNaN(d) ? '' : d.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+      }
+
+      function el(tag, className, text) {
+        var node = document.createElement(tag);
+        if (className) node.className = className;
+        if (text != null) node.textContent = text;
+        return node;
+      }
+
+      // onClick returns the API request, or nothing if the person cancelled.
+      function button(label, className, onClick) {
+        var b = el('button', className, label);
+        b.type = 'button';
+        b.addEventListener('click', function () {
+          var request = onClick();
+          if (!request) return;
+          b.disabled = true;
+          request.then(load).catch(explain).then(function () { b.disabled = false; });
+        });
+        return b;
+      }
+
+      // Everything below is built with textContent, so nothing a commenter
+      // typed can run as code on this page.
+      function renderComment(c) {
+        var li = el('li', 'bg-white rounded-2xl border border-cream-200 p-5 md:p-6');
+
+        var top = el('p', 'text-xs uppercase tracking-widest font-semibold text-crimson-600 mb-3');
+        var link = el('a', 'hover:text-crimson-900 hover:underline', c.postTitle);
+        link.href = '/blog/' + encodeURIComponent(c.post) + '/#comments';
+        link.target = '_blank';
+        top.appendChild(link);
+        top.appendChild(document.createTextNode(' · ' + when(c.createdAt)));
+
+        var who = el('p', 'mb-2');
+        who.appendChild(el('span', 'font-semibold text-stone-900', c.name));
+        if (c.email) {
+          var mail = el('a', 'ml-2 text-sm text-crimson-700 hover:underline break-all', c.email);
+          mail.href = 'mailto:' + c.email;
+          who.appendChild(mail);
+        }
+
+        var text = el('p', 'text-stone-700 leading-relaxed whitespace-pre-line break-words', c.comment);
+
+        var actions = el('div', 'mt-4 flex flex-wrap gap-3');
+        actions.appendChild(button('Delete', 'rounded-full border border-cream-300 px-4 py-1.5 text-sm font-semibold text-stone-700 hover:border-crimson-300 hover:text-crimson-700 disabled:opacity-50', function () {
+          if (confirm('Delete this comment from ' + c.name + '? It will disappear from the blog. This can’t be undone.')) {
+            return api('POST', { action: 'delete', post: c.post, id: c.id });
+          }
+        }));
+        actions.appendChild(button('Block & delete', 'rounded-full bg-crimson-700 px-4 py-1.5 text-sm font-semibold text-white hover:bg-crimson-800 disabled:opacity-50', function () {
+          if (confirm('Block ' + c.name + '?\n\nThis deletes this comment and keeps their future comments off the site. It matches their ' + (c.email ? 'email address and ' : '') + 'internet connection, so anyone else on the same connection (for example the same home or church Wi-Fi) is blocked too.\n\nYou can unblock them later at the bottom of this page.')) {
+            return api('POST', { action: 'block', post: c.post, id: c.id });
+          }
+        }));
+
+        li.appendChild(top);
+        li.appendChild(who);
+        li.appendChild(text);
+        li.appendChild(actions);
+        return li;
+      }
+
+      function renderBlock(b) {
+        var li = el('li', 'flex flex-wrap items-center justify-between gap-3 bg-white rounded-xl border border-cream-200 px-5 py-3');
+        var info = el('p', 'text-sm text-stone-700');
+        info.appendChild(el('span', 'font-semibold text-stone-900', b.name));
+        var parts = [];
+        if (b.email) parts.push(b.email);
+        if (b.byIp) parts.push('their internet connection');
+        info.appendChild(document.createTextNode(' · blocks ' + parts.join(' and ') + ' · since ' + when(b.blockedAt)));
+        li.appendChild(info);
+        li.appendChild(button('Unblock', 'text-sm font-semibold text-crimson-700 hover:text-crimson-900 disabled:opacity-50', function () {
+          if (confirm('Unblock ' + b.name + '? Their new comments will appear on the blog again.')) {
+            return api('POST', { action: 'unblock', id: b.id });
+          }
+        }));
+        return li;
+      }
+
+      function load() {
+        return api('GET').then(function (data) {
+          show('');
+          signIn.hidden = true;
+          dashboard.hidden = false;
+          $('signOut').hidden = false;
+
+          var list = $('comments');
+          list.textContent = '';
+          data.comments.forEach(function (c) { list.appendChild(renderComment(c)); });
+          $('noComments').hidden = data.comments.length > 0;
+
+          var blocks = $('blocks');
+          blocks.textContent = '';
+          data.blocks.forEach(function (b) { blocks.appendChild(renderBlock(b)); });
+          $('noBlocks').hidden = data.blocks.length > 0;
+        });
+      }
+
+      signIn.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var submit = signIn.querySelector('button[type="submit"]');
+        password = $('password').value;
+        submit.disabled = true;
+        $('signInError').textContent = '';
+        load()
+          .then(function () {
+            try { localStorage.setItem(KEY, password); } catch (e) {}
+            $('password').value = '';
+          })
+          .catch(explain)
+          .then(function () { submit.disabled = false; });
+      });
+
+      $('signOut').addEventListener('click', function () {
+        forget();
+        showSignIn('');
+      });
+
+      $('refresh').addEventListener('click', function () { load().catch(explain); });
+
+      if (password) load().catch(explain);
+      else showSignIn('');
+    })();
+  </script>
+</body>
+</html>
