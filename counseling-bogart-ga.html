@@ -29,15 +29,17 @@
   <meta property="og:url" content="https://encountersinjoy.org/counseling-bogart-ga.html">
   <meta property="og:title" content="Counseling in Bogart, GA | Encounters in Joy">
   <meta property="og:description" content="Faith-grounded counseling for Bogart, GA residents — from our office in Statham, 10 miles away. Set fee per session with sliding scale and scholarship fund.">
-  <meta property="og:image" content="https://encountersinjoy.org/eij%20with%20words.png">
-  <meta property="og:image:alt" content="Encounters in Joy - Christian counseling in Bogart, GA">
+  <meta property="og:image" content="https://encountersinjoy.org/images/og-encounters-in-joy.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Encounters in Joy — Christian counseling in Statham, GA">
   <meta property="og:locale" content="en_US">
   <meta property="og:site_name" content="Encounters in Joy">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Counseling in Bogart, GA | Encounters in Joy">
   <meta name="twitter:description" content="Faith-grounded counseling for Bogart, GA residents — from our office in Statham, 10 miles away. Set fee per session with sliding scale and scholarship fund.">
-  <meta name="twitter:image" content="https://encountersinjoy.org/eij%20with%20words.png">
+  <meta name="twitter:image" content="https://encountersinjoy.org/images/og-encounters-in-joy.jpg">
 
   <script type="application/ld+json">
   {
@@ -72,40 +74,37 @@
   }
   </script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            crimson: { 50: '#fdf3f1', 100: '#fadcd5', 200: '#f1ad9f', 300: '#e57f6c', 400: '#d65543', 500: '#d63725', 600: '#c42a20', 700: '#a72017', 800: '#8f2e24', 900: '#65100b' },
-            gold:    { 50: '#fff8e1', 100: '#ffeeba', 200: '#ffe085', 300: '#ffd052', 400: '#ffcc33', 500: '#f2cc5a', 600: '#d8a013', 700: '#b58015', 800: '#8a5a16', 900: '#623a14' },
-            cream:   { 50: '#f9f7f6', 100: '#f4efe9', 200: '#efe5da', 300: '#e2ddd5', 400: '#d3c5b0', 500: '#b39c7d', 600: '#8e7558', 700: '#6e5841', 800: '#4f3f2e', 900: '#332820' },
-            brown:   { 50: '#f6f1ec', 100: '#e6d8c8', 200: '#cdb293', 300: '#b08c66', 400: '#8c6c4a', 500: '#74503e', 600: '#5e4030', 700: '#4a3225', 800: '#3a2820', 900: '#2a1d18' },
-          },
-          fontFamily: {
-            display: ['"Cormorant Garamond"', 'serif'],
-            body: ['"Source Sans 3"', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
+  <!-- Icons -->
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <!-- Styles: one compiled stylesheet (Tailwind + self-hosted fonts), see tailwind.config.js -->
+  <link rel="preload" href="/assets/fonts/source-sans-3-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/cormorant-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/site.css">
   <style>
     body { font-family: 'Source Sans 3', sans-serif; }
     .mobile-menu { max-height: 0; overflow: hidden; visibility: hidden; transition: max-height 0.35s ease, visibility 0s linear 0.35s; }
     .mobile-menu.open { max-height: 560px; visibility: visible; transition: max-height 0.35s ease, visibility 0s; }
   </style>
+  <!-- BreadcrumbList schema — matches the visible breadcrumb under the menu -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://encountersinjoy.org/" },
+      { "@type": "ListItem", "position": 2, "name": "Counseling in Bogart, GA", "item": "https://encountersinjoy.org/counseling-bogart-ga.html" }
+    ]
+  }
+  </script>
 </head>
 <body class="bg-cream-50 text-stone-800">
 
   <nav class="bg-cream-50 border-b border-cream-200">
     <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
       <a href="index.html" class="flex items-center gap-3 font-display text-xl font-semibold text-crimson-800 tracking-tight">
-        <img src="EIJ logo.png" alt="" class="h-8 w-auto">
+        <img src="/images/eij-logo.webp" alt="" width="240" height="180" class="h-8 w-auto">
         Encounters in Joy
       </a>
       <!-- Desktop links -->
@@ -149,6 +148,15 @@
         <a href="#contact" class="bg-gold-400 text-brown-900 font-semibold px-5 py-2.5 rounded-full text-center">Take the first step</a>
       </div>
     </div>
+  </nav>
+
+  <!-- Breadcrumb (mirrors the BreadcrumbList schema in <head>) -->
+  <nav aria-label="Breadcrumb" class="bg-cream-50 border-b border-cream-200">
+    <ol class="max-w-6xl mx-auto px-6 py-2.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-stone-500">
+      <li><a href="/" class="hover:text-crimson-700">Home</a></li>
+      <li aria-hidden="true" class="text-stone-400">&rsaquo;</li>
+      <li><span aria-current="page" class="text-stone-700 font-medium">Counseling in Bogart, GA</span></li>
+    </ol>
   </nav>
 
   <!-- Hero -->
@@ -295,7 +303,7 @@
       <div class="grid md:grid-cols-3 gap-10 mb-10">
         <div>
           <div class="flex items-center gap-3 mb-4">
-            <img src="WatercolorApple(4).png" alt="" loading="lazy" decoding="async" width="320" height="320" class="h-10 w-auto">
+            <img src="/images/eij-apple.webp" alt="" loading="lazy" decoding="async" width="200" height="200" class="h-10 w-auto">
             <p class="font-display text-xl font-semibold text-gold-300">Encounters in Joy, Inc.</p>
           </div>
           <p class="text-cream-300 text-sm leading-relaxed mb-3">A 501(c)(3) ministry providing professional, faith-grounded counseling for individuals, couples, and families across Barrow County and beyond. Sliding scale &amp; scholarships available.</p>

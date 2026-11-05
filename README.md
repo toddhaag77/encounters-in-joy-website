@@ -5,20 +5,25 @@ counseling ministry based in Statham, GA, serving Barrow County and surrounding 
 
 ## Stack
 
-- Plain static HTML + Tailwind (loaded from CDN)
+- Plain static HTML + Tailwind, compiled once at build time into `assets/site.css` (fonts self-hosted in `assets/fonts/`). See [Styles, fonts, images, favicon](#styles-fonts-images-favicon).
 - Hosted on Netlify
 - Lead form via Netlify Forms
-- Blog: [Decap CMS](https://decapcms.org/) editor at `/admin/` + a small build script (no framework, no npm install)
+- Blog: [Decap CMS](https://decapcms.org/) editor at `/admin/` + a small build script (no framework)
 - Blog comments: Netlify Forms + Netlify Functions + Netlify Blobs, moderated at `/admin/comments.html`
 - Analytics: Google Analytics 4 + Microsoft Clarity
 - Indexed via Google Search Console
 
 ## Local development
 
-Build the blog pages once, then serve the folder with any static server:
+Install the build packages once, build the stylesheet and the blog pages, then
+serve the folder with any static server:
 
 ```bash
-node tools/build-blog.js
+npm install
+```
+
+```bash
+npm run build
 ```
 
 ```bash
@@ -29,8 +34,9 @@ python -m http.server 3000
 npx serve .
 ```
 
-Then visit `http://localhost:3000`. (`index.html` and the other hand-written pages
-also open fine directly in a browser; only the blog needs the build step.)
+Then visit `http://localhost:3000`. (`assets/site.css` is committed, so the
+hand-written pages also open fine directly in a browser; `npm run build` is only
+needed after changing blog posts, or Tailwind classes anywhere in the site.)
 
 To try the blog editor locally, run `npx decap-server` in a second terminal, then open
 `http://localhost:3000/admin/` and click **Login** — no password needed locally. Posts
@@ -75,14 +81,15 @@ lives in `admin/config.yml`.
 
 - Posts are Markdown files in `blog/posts/` with a small header (title, date,
   author, summary, photo, draft). The editor writes these files to GitHub.
-- Every push to `main` makes Netlify run `node tools/build-blog.js`
-  (see `netlify.toml`), which generates `blog/index.html`, one page per post at
-  `blog/<slug>/index.html`, `blog/feed.xml` (RSS), and refreshes the blog
-  entries in `sitemap.xml`. Those generated files are git-ignored.
+- Every push to `main` makes Netlify run `npm run build` (see `netlify.toml`
+  and `package.json`). Its blog half, `node tools/build-blog.js`, generates
+  `blog/index.html`, one page per post at `blog/<slug>/index.html`,
+  `blog/feed.xml` (RSS), and refreshes the blog entries in `sitemap.xml`. Those
+  generated files are git-ignored. (The other half compiles the stylesheet.)
 - Page templates (nav, footer, article styling) live in `tools/blog-templates.js`.
-  `tools/vendor/` holds the two libraries the build uses (marked, js-yaml) so
-  the blog build needs no `npm install`. (Netlify does install one package, for
-  the comment functions; see [Comments](#comments).)
+  `tools/vendor/` holds the two libraries the blog build uses (marked, js-yaml)
+  so it needs no packages of its own. (Netlify's `npm install` is for the
+  stylesheet and the comment functions; see [Comments](#comments).)
 - Photos uploaded in the editor go to `images/blog/`. On the live site they are
   served through Netlify's Image CDN (resized + compressed), so big phone photos
   are fine.
@@ -92,7 +99,10 @@ lives in `admin/config.yml`.
 ### Adding an author
 
 Add the name to the `author` options in `admin/config.yml`, and (optionally) a
-photo + role in the `AUTHORS` list at the top of `tools/blog-templates.js`.
+photo, role and two-sentence bio in the `AUTHORS` list at the top of
+`tools/blog-templates.js`. The bio shows under every post by that author and goes
+into the post's structured data, so keep it factual and in step with the
+credentials on `about.html#team`.
 
 ### Updating the editor
 
@@ -172,6 +182,37 @@ only until you reload. To save one, send the form event to the function yourself
 curl -X POST http://localhost:8888/.netlify/functions/submission-created -H "content-type: application/json" --data '{"payload":{"id":"test1","form_name":"blog-comment","created_at":"2026-10-26T12:00:00Z","data":{"post":"welcome-to-our-blog","post-title":"Welcome","name":"Test","comment":"Hello","ip":"192.0.2.1"}}}'
 ```
 
+## Styles, fonts, images, favicon
+
+- **Stylesheet.** Every page loads one compiled stylesheet, `assets/site.css`,
+  built by `npm run build:css` from `tailwind.config.js` (the colour palette and
+  font names) and `tools/tailwind.css` (the `@font-face` rules). Netlify rebuilds
+  it on every deploy, and it is also committed so the pages work without a
+  build. The pages used to load Tailwind's Play CDN, which generated the CSS in
+  the visitor's browser on every visit (slow first paint, a flash of unstyled
+  content); don't put that script back. If a page outside the repo root starts
+  using Tailwind classes, add its path to `content` in `tailwind.config.js` or
+  its classes won't be compiled.
+- **Fonts.** Cormorant Garamond and Source Sans 3 are self-hosted in
+  `assets/fonts/` (the Latin subsets Google Fonts serves, variable weight, SIL
+  Open Font License), so no page waits on fonts.googleapis.com. Each page
+  preloads the two files it paints first.
+- **Images.** The logo, apple mark and counselor photos are served as WebP from
+  `images/` (`eij-logo.webp`, `eij-logo-hero.webp`, `eij-apple.webp`,
+  `jeff-langley.webp`, `stephanie-langley.webp`), sized for how they appear,
+  with `width`/`height` on every `<img>` so nothing shifts while loading. The
+  originals (`EIJ logo.png`, `WatercolorApple(4).png`, `Jeff.jpg`,
+  `Stephanie.jpg`) stay in the repo as masters; regenerate the WebP files from
+  them if a photo changes. `images/og-encounters-in-joy.jpg` (1200×630) is the
+  preview image for links shared on Facebook, in texts, etc.
+- **Favicon.** `favicon.ico`, `favicon-192.png` and `apple-touch-icon.png` in
+  the root, cropped from the apple-and-cross logo. Google shows it beside the
+  site name in mobile results.
+- **Breadcrumbs.** Every page except the homepage shows a small breadcrumb trail
+  under the menu (`<nav aria-label="Breadcrumb">`) with a matching
+  `BreadcrumbList` block in its `<head>`; blog pages get theirs from the
+  template. Keep the two in step when a page is renamed.
+
 ## Files
 
 | File | Purpose |
@@ -188,15 +229,20 @@ curl -X POST http://localhost:8888/.netlify/functions/submission-created -H "con
 | `admin/` | Blog editor (Decap CMS) and its `config.yml` |
 | `admin/comments.html` | Comment moderation page (delete, block). See [Comments](#comments). |
 | `netlify/functions/`, `netlify/lib/` | Server-side code for blog comments |
-| `package.json`, `package-lock.json` | The one package the comment functions use (`@netlify/blobs`) |
+| `package.json`, `package-lock.json` | Build scripts and the two packages: `tailwindcss` (stylesheet) and `@netlify/blobs` (comment functions) |
+| `tailwind.config.js`, `tools/tailwind.css` → `assets/site.css` | Stylesheet source and the compiled stylesheet every page loads. See [Styles](#styles-fonts-images-favicon). |
+| `assets/fonts/` | Self-hosted web fonts |
+| `images/*.webp`, `images/og-encounters-in-joy.jpg` | Site images (logo, apple mark, counselor photos) and the social preview image |
+| `favicon.ico`, `favicon-192.png`, `apple-touch-icon.png` | Browser tab / search result / home screen icons |
 | `blog/posts/*.md` | Blog post source files (the only blog files in git) |
 | `tools/build-blog.js`, `tools/blog-templates.js` | Blog build script and page templates |
 | `images/blog/` | Photos uploaded through the editor |
-| `netlify.toml` | Netlify build command, functions folder + headers |
+| `netlify.toml` | Netlify build command, functions folder, redirects + headers |
 | `sitemap.xml` | Search engine sitemap (blog section is auto-generated) |
 | `robots.txt` | Crawler directives |
-| `Jeff.jpg`, `Stephanie.jpg` | Counselor headshots (also used as blog author photos) |
-| `WatercolorApple(4).png`, `eij with words.png`, `EIJ logo.png` | Logo assets |
+| `Jeff.jpg`, `Stephanie.jpg` | Counselor headshot masters (the pages use the WebP copies in `images/`) |
+| `WatercolorApple(4).png`, `EIJ logo.png` | Logo masters (the pages use the WebP copies in `images/`) |
+| `eij with words.png` | Wordmark; the organization logo in structured data and the source of the social preview image |
 
 ## Nonprofit details (Google for Nonprofits)
 
